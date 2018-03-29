@@ -1,0 +1,17 @@
+{
+	"name": "course-work",
+	"authors": [
+		"Vladyslav Mokrousov",
+		"Vasyl Teliman (Vasniktel)"
+	],
+	"homepage": "https://github.com/Vasniktel/hashcode",
+	"targetName": "course-work",
+	"targetType": "executable",
+	"targetPath": "bin",
+	"dependencies": {
+		"dlangui": "~>0.9.177"
+	},
+	"description": "Course work based on Google HashCode 2018 task",
+	"copyright": "Copyright © 2018, Vladyslav Mokrousov and Vasyl Teliman (Vasniktel)",
+	"license": "MIT"
+}
