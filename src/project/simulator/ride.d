@@ -20,7 +20,7 @@ immutable class Ride {
 
 immutable struct RideResult {
   Ride ride;
-  bool taken;
+  bool assigned;
   bool bonused;
   bool scored;
 
