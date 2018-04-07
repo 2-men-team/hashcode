@@ -2,7 +2,7 @@
 	"name": "course-work",
 	"authors": [
 		"Vladyslav Mokrousov",
-		"Vasyl Teliman (Vasniktel)"
+		"Vasyl Teliman <vasniktel@gmail.com>"
 	],
 	"homepage": "https://github.com/Vasniktel/hashcode",
 	"targetName": "course-work",
@@ -11,7 +11,12 @@
 	"dependencies": {
 		"dlangui": "~>0.9.177"
 	},
+	"subConfigurations": {
+		"dlangui": "x11"
+	},
+	"versions": [],
+	"stringImportPaths": ["views", "views/res", "views/res/mdpi", "views/res/hdpi"],
 	"description": "Course work based on Google HashCode 2018 task",
-	"copyright": "Copyright © 2018, Vladyslav Mokrousov and Vasyl Teliman (Vasniktel)",
+	"copyright": "Copyright © 2018, Vladyslav Mokrousov and Vasyl Teliman",
 	"license": "MIT"
 }
