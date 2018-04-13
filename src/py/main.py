@@ -2,8 +2,6 @@ import sys
 
 file_in = sys.argv[1]
 file_out = sys.argv[2]
-a = sys.argv[3]
-b = sys.argv[4]
 
 # main distance function
 def distance(start_x,start_y,end_x,end_y):
@@ -52,7 +50,7 @@ def main(input_file):
             best_ride = None
             for ride in copied_rides:
                 if not reachable(car, ride, step): continue
-                scored = score(car, ride, bonus, step, a, b)
+                scored = score(car, ride, bonus, step)
 
                 if scored >= best_ride_score:
                     best_ride = ride
@@ -81,9 +79,9 @@ def read_input(input_file):
             rides_list.append(Ride(i,*ride))
     return rides_list, rows, columns, cars, rides, bonus, steps
 
-def score(car, ride, bonus, step, a, b):
+def score(car, ride, bonus, step):
     dist_to_ride = car.distance_to_start(ride)
-    ride_score = -a*max(dist_to_ride, ride.early - step)
+    ride_score = -*max(dist_to_ride, ride.early - step)
 
     if (ride.early > step + dist_to_ride):
         ride_score += b*bonus
