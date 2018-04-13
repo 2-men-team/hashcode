@@ -81,10 +81,10 @@ def read_input(input_file):
 
 def score(car, ride, bonus, step):
     dist_to_ride = car.distance_to_start(ride)
-    ride_score = -*max(dist_to_ride, ride.early - step)
+    ride_score = -max(dist_to_ride, ride.early - step)
 
     if (ride.early > step + dist_to_ride):
-        ride_score += b*bonus
+        ride_score += bonus
 
     return ride_score
 
