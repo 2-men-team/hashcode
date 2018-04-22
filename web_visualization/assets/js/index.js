@@ -50,7 +50,7 @@ function readUrl(input, flag) {
         file_out = data;
       }
       let name = input.files[0].name;
-      input.setAttribute("data-title", "Uploaded `${flag}` file");
+      input.setAttribute("data-title", "Uploaded file");
     }
     reader.readAsText(input.files[0]);
   }
