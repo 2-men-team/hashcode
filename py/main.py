@@ -1,104 +1,130 @@
-import sys
+from tkinter import filedialog
+from tkinter import *
+import tkinter
+from assets.Simulator import Simulator
+from assets.Visualizer import Visualizer
 
-file_in = sys.argv[1]
-file_out = sys.argv[2]
+# Requirement for running: sudo apt-get install python3-tk
+# Run this file at shell as: python3 main.py
 
-# main distance function
-def distance(start_x,start_y,end_x,end_y):
-    return abs(end_x - start_x) + abs(end_y - start_y)
+class Window(Frame):
+    def create_widgets(self):
+        # Output
+        self.output = tkinter.Button(self, text="Output", command=self.upload_output, width=22, height=1)
+        self.output.grid(row=0, column=1, pady=(0,10))
 
-# classes
-class Ride(object):
-    def __init__(self, id,start_x,start_y,end_x,end_y,early,fin_time):
-        self.id = id
-        self.start_x = start_x
-        self.start_y = start_y
-        self.end_x = end_x
-        self.end_y = end_y
-        self.early = early
-        self.fin_time = fin_time
+        # uploaded file Text
+        self.text_file_output = Entry(self, width=83)
+        self.text_file_output.grid(row=0, column=2, pady=(0,5), padx=(5,5))
 
-    def distance(self):
-        return abs(self.start_x - self.end_x) + abs(self.start_y - self.end_y)
+        # browse Button
+        self.input = tkinter.Button(self, text="Input", command=self.upload_input, width=22, height=1)
+        self.input.grid(row=1, column=1, pady=(0,10))
 
-class Car(object):
-    def __init__(self, id):
-        self.id  = id
-        self.x = 0
-        self.y = 0
-        self.rides = []
-        self.steps_left = 0
+        # uploaded file Text
+        self.text_file_input = Entry(self, width=83)
+        self.text_file_input.grid(row=1, column=2, pady=(0,5), padx=(5,5))
 
-    def distance_to_start(self,ride):
-        return distance(self.x,self.y,ride.start_x,ride.start_y)
+        # text field
+        self.text = Text(self, width=125, height=40)
+        self.grid(padx=20, pady=20)
+        self.text.grid(row=2, column=1, columnspan=2)
 
-    def add_ride(self, ride):
-        self.rides.append(ride.id)
-        self.x = ride.end_x
-        self.y = ride.end_y
+        # process button
+        self.proceed = tkinter.Button(self)
+        self.proceed["text"] = "Process"
+        self.proceed["command"] = self.process
+        self.proceed["width"] = 30
+        self.proceed.grid(row=3, column=1, pady=(14,0), columnspan=2)
 
-# functions
-def main(input_file):
-    rides_list, rows, columns, fleet, rides, bonus, steps = read_input(input_file)
-    cars = [Car(i) for i in range(fleet)]
+    #initializing main frame
+    def __init__(self, master=None):
+        self.root = master
+        self.root.geometry("1024x768")
+        self.root.resizable(width=False, height=False)
+        self.root.grid_rowconfigure(0, weight=1)
+        self.root.grid_columnconfigure(0, weight=1)
 
-    for car in cars:
-        step = 0
-        while step < steps:
-            best_ride_score = -1000000
-            copied_rides = [x for x in rides_list]
-            best_ride = None
-            for ride in copied_rides:
-                if not reachable(car, ride, step): continue
-                scored = score(car, ride, bonus, step)
+        Frame.__init__(self, master)
+        self.pack()
+        self.create_widgets()
 
-                if scored >= best_ride_score:
-                    best_ride = ride
-                    best_ride_score = scored
-            if not best_ride == None:
-                step += max(car.distance_to_start(best_ride), best_ride.early - step) + best_ride.distance()
-                car.add_ride(best_ride)
-                rides_list.remove(best_ride)
-                del best_ride
-            else:
-                break
-    return cars
+    # uploading input data
+    def upload_input(self):
+        if(self.text_file_input.get() != ''):
+            self.root.filename = self.text_file_input.get()
+        else:
+            self.root.filename = filedialog.askopenfilename(initialdir = "/home/napoleon/course_work/realization",title = "Select file",filetypes = (("input files","*.in"),("all files","*.*")))
+        self.raw = self.read(self.root.filename)
+        if self.raw is not None:
+            self.text.insert('1.0', self.raw)
+            if self.text_file_input.get() == '':
+                self.text_file_input.insert(0, self.root.filename)
 
-def reachable(car, ride, step):
-    return (step + car.distance_to_start(ride) + ride.distance() <= ride.fin_time)
+    # uploadig output file name
+    def upload_output(self):
+        if(self.text_file_output.get() != ''):
+            self.file_out = self.text_file_output.get()
+        else:
+            self.file_out = filedialog.askopenfilename(initialdir = "/home/napoleon/course_work/realization",title = "Select file",filetypes = (("output files","*.out"),("all files","*.*")))
+            self.text_file_output.insert(0, self.file_out)
 
-def read_input(input_file):
-    with open(input_file) as file:
-        res_array = file.read().split("\n")
-        res_array = [x.split(" ") for x in res_array]
-        rows, columns, cars, rides, bonus, steps = tuple([int(x) for x in res_array[0]])
-        del res_array[0], res_array[-1]
-        rides_list = []
-        for i in range(len(res_array)):
-            ride = tuple([int(x) for x in res_array[i]])
-            rides_list.append(Ride(i,*ride))
-    return rides_list, rows, columns, cars, rides, bonus, steps
+    # reading input file
+    def read(self, input_file):
+        try:
+            with open(input_file) as file:
+                raw = file.read()
+            return raw
+        except EnvironmentError:
+            print("Invalid file name. Please try again")
+            return None
 
-def score(car, ride, bonus, step):
-    dist_to_ride = car.distance_to_start(ride)
-    ride_score = -max(dist_to_ride, ride.early - step)
+    # processing the input file
+    def process(self):
+        try:
+            self.simulator = Simulator(self.raw, self.file_out)
+            self.score_dialogue() # show result score
+        except AttributeError:
+            print("Files missing!")
 
-    if (ride.early > step + dist_to_ride):
-        ride_score += bonus
+    # modal window with score result
+    def score_dialogue(self):
+        dlg = Toplevel()
+        dlg.wm_title("Result")
+        dlg.geometry("190x80")
+        dlg.resizable(width=False, height=False)
+        text = "Your score is :  "+ str(self.simulator.score)
+        l = Label(dlg, text=text)
+        l.grid(row=0, column=0, columnspan=2)
 
-    return ride_score
+        b = Button(dlg, text="visualize", command=self.visualize, pady=10)
+        b.grid(row=1, column=0, columnspan=2)
 
-def print_result(output_file, cars):
-    with open(output_file, "a") as output:
-        for car in cars:
-            if len(car.rides)-1 < 0:
-                x = 0
-            else:
-                x = len(car.rides)-1
-            output.write(str(x) + " ")
-            for i in range(len(car.rides)-1):
-                output.write(str(car.rides[i]) + " ")
-            output.write("\n")
+        dlg.grab_set()
+        dlg.wait_window(dlg)
 
-cars = main(file_in)
-print_result(file_out, cars)
+    # visualize modal for showing visualization
+    def visualize(self):
+        vis = Toplevel()
+        vis.wm_title("Visualization")
+        vis.geometry("801x601")
+        vis.resizable(width=False, height=False)
+        generator = Button(vis, text="Generate new!", command=self.generate, pady=10)
+        generator.grid(row=1, column=0)
+        self.canv = Canvas(vis, width=800, height=600)
+        self.canv.grid(row=2,column=0)
+
+        vis.grab_set()
+        vis.wait_window(vis)
+
+    # generating image
+    def generate(self):
+        self.canv.delete("all")
+        visualizer = Visualizer(self.canv, self.raw, self.file_out) # Visualize - image generator
+        visualizer.visualize()
+
+if __name__ == "__main__":
+    root = Tk()
+    root.title("Hashcode")
+    window = Window(root)
+    root.mainloop()
