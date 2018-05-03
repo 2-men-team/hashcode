@@ -1,15 +1,14 @@
-module project.simulator.simulator;
+module project.algo.simulator.simulator;
 
 import std.array : split, array;
 import std.conv : to, ConvException;
 import std.algorithm.iteration : map;
 import std.math : abs;
 
-import project.simulator.exceptions : InvalidInputException, InvalidAlgorithmException;
-import project.simulator.car : Car;
-import project.simulator.ride : Ride;
-public import project.simulator.ride : RideResult;
-public import project.simulator.util : Pos;
+public import project.algo.simulator.exceptions;
+import project.algo.models;
+//public import project.simulator.ride : RideResult;
+public import project.algo.util : Pos;
 
 import dlangui;
 

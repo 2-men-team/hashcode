@@ -1,6 +1,6 @@
-module project.simulator.ride;
+module project.algo.models.ride;
 
-public import project.simulator.util : Pos;
+public import project.algo.util : Pos;
 
 immutable class Ride {
   uint id;

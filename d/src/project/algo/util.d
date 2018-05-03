@@ -1,4 +1,4 @@
-module project.simulator.util;
+module project.algo.util;
 
 struct Pos {
   int x;

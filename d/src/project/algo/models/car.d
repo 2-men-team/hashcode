@@ -1,7 +1,7 @@
-module project.simulator.car;
+module project.algo.models.car;
 
-import project.simulator.ride : Ride;
-import project.simulator.util : Pos;
+import project.algo.models.ride : Ride;
+import project.algo.util : Pos;
 
 class Car {
   private immutable uint _id;

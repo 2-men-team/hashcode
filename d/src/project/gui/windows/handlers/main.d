@@ -1,19 +1,18 @@
-module project.app.handlers;
+module project.gui.windows.handlers.main;
 
-import project.simulator : Simulator, SimulatorException, RideResult;
-
-import dlangui.dialogs.filedlg;
-import dlangui.dialogs.dialog;
+import project.gui.abstractions.application : Application;
+import project.algo : Simulator, SimulatorException, RideResult;
+import project.gui.abstractions.interfaces : Attachable;
+import project.gui.windows.holders.text;
 
 import std.path : sep = dirSeparator;
 import std.array : split;
 import std.utf : toUTF32, toUTF8;
 
+import dlangui.dialogs.filedlg;
+import dlangui.dialogs.dialog;
 import dlangui;
 
-interface Attachable {
-  Attachable attachTo(Widget);
-}
 
 class OpenFileButtonPressed : OnClickHandler, Attachable {
   override bool onClick(Widget src) {

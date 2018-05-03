@@ -1,10 +1,13 @@
-module project.app.config;
+module project.gui.windows.content.main;
 
-version (WITH_RESOURCES) {
-  enum string resources = "resources.list";
-}
+import project.gui.windows.instantiator.instantiator;
+import dlangui;
 
-enum string GUI = q{
+BasicWindowInstantiator instantiator;
+immutable string windowId = "main";
+immutable string parentId = null;
+
+private enum string GUI = q{
   VerticalLayout {
     backgroundColor: "#D3DAE3"
     margins: 10
@@ -45,25 +48,20 @@ enum string GUI = q{
       text: "Proceed"
       fontSize: 15px
     }
-    /*VSpacer {}
-    TextWidget {
-      alignment: center
-      fontSize: 20px
-      textColor: "red"
-      text: "score:"
-      //visibility: Invisible
-    }
-    TextWidget {
-      alignment: center
-      fontSize: 30px
-      textColor: "red"
-      text: "123"
-      //visibility: Invisible
-    }*/
   }
 };
 
-enum string[][string] GUIHandlers = [
-  "proceedButton": ["project.app.handlers.ProceedButtonPressed"],
-  "openFileButton": ["project.app.handlers.OpenFileButtonPressed"]
+private enum string[][string] GUIHandlers = [
+  "proceedButton": ["project.gui.windows.handlers.main.ProceedButtonPressed"],
+  "openFileButton": ["project.gui.windows.handlers.main.OpenFileButtonPressed"]
 ];
+
+static this() {
+  WindowInitParams params = {
+    caption: UIString.fromRaw("Course work"d),
+    content: GUI,
+    handlers: GUIHandlers
+  };
+
+  instantiator = new BasicWindowInstantiator(params);
+}
