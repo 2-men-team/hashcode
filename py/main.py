@@ -1,6 +1,7 @@
+# importing tkinter and class Window
 import tkinter
 from tkinter import *
-from app.Window import Window
+from app.window import Window
 
 # Requirement for running: sudo apt-get install python3-tk
 # Run this file at shell as: python3 main.py
