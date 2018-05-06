@@ -9,6 +9,8 @@ from app.window import Window
 if __name__ == "__main__":
     # initializing window
     root = Tk()
+    img = PhotoImage(file='./assets/c.ico')
+    root.tk.call('wm', 'iconphoto', root._w, img)
     root.title("Hashcode")
     window = Window(root)
 
