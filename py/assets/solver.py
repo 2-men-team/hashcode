@@ -42,21 +42,29 @@ class Solver(object):
 
     def score(self, car, ride, step):
         '''Heuristic function to calculate the effectiveness of ride.'''
+        # 46345713
         dist_to_ride = car.distance_to_start(ride)
-        ride_score = -max(dist_to_ride, ride.early - step)
+        ride_score = -max(dist_to_ride, ride.early - step) # choosing the ride withleast dist_to_ride
 
         if (ride.early > step + dist_to_ride):
             ride_score += self.bonus
         return ride_score
 
+        # 44375682
+        #scored = 0
+        #if (car.finish_time(ride) < ride.fin_time):
+        #    scored += ride.distance()
+        #if ride.early > step + dist_to_ride:
+        #    scored += self.bonus - car.wait_time(ride)
+        #scored -= dist_to_ride
+        #return scored
+
     def print_result(self):
         '''Write output to file.'''
         with open(self.output_file, "w") as output:
             for car in self.cars:
-                if len(car.rides)-1 < 0:
-                    x = 0
-                else:
-                    x = len(car.rides)-1
+                if len(car.rides)-1 < 0: x = 0
+                else: x = len(car.rides)-1
                 output.write(str(x) + " ")
                 for i in range(len(car.rides)-1):
                     output.write(str(car.rides[i]) + " ")

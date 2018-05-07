@@ -126,7 +126,6 @@ class Window(Frame):
         b["width"] = 15
         b["padx"] = 4
 
-        dlg.grab_set()
         dlg.wait_window(dlg)
 
     def visualize(self):
