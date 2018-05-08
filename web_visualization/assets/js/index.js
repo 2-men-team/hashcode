@@ -50,7 +50,7 @@ function readUrl(input, flag) {
         file_out = data;
       }
       let name = input.files[0].name;
-      input.setAttribute("data-title", "Uploaded `${flag}` file");
+      input.setAttribute("data-title", "Uploaded file");
     }
     reader.readAsText(input.files[0]);
   }
@@ -108,7 +108,9 @@ function generate() {
     let cars = res[2];
     // get canvas
     let canvas = document.getElementById('canv');
-
+    let context = canvas.getContext("2d");
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    
     for(let i = 0; i < rides_list.length && i < 100; i++) {
       let ride_id = rides_list.length > 100 ? Math.floor(Math.random()*rides_list.length) : i;
       let ride = rides_list[ride_id];
@@ -151,10 +153,10 @@ function color(ride, car, step, canvas, world_data, rides_list) {
     let dist_to_ride = Math.abs(car.x - rides_list[car.rides[i]].start_x) + Math.abs(car.y - rides_list[car.rides[i]].start_y);
     car.step += dist_to_ride;
     car.x = rides_list[car.rides[i]].start_x;
+    break;
     car.y = rides_list[car.rides[i]].start_y;
     // break if we found ride and at it's start position
     if(i == index)
-      break;
     car.step += rides_list[car.rides[i]].distance();
     car.x = rides_list[car.rides[i]].end_x;
     car.y = rides_list[car.rides[i]].end_y;
