@@ -4,8 +4,8 @@ import project.gui.windows.instantiator.instantiator;
 import dlangui;
 
 BasicWindowInstantiator instantiator;
-immutable string windowId = "main";
-immutable string parentId = null;
+enum string windowId = "main";
+enum string parentId = null;
 
 private enum string GUI = q{
   VerticalLayout {

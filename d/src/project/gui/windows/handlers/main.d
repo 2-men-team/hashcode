@@ -1,13 +1,14 @@
 module project.gui.windows.handlers.main;
 
 import project.gui.abstractions.application : Application;
-import project.algo : Simulator, SimulatorException, RideResult;
+import project.algo : Simulator, SimulatorException;
 import project.gui.abstractions.interfaces : Attachable;
-import project.gui.windows.holders.text;
+import project.gui.windows.holders : TextHolder;
 
 import std.path : sep = dirSeparator;
 import std.array : split;
 import std.utf : toUTF32, toUTF8;
+import std.conv : to;
 
 import dlangui.dialogs.filedlg;
 import dlangui.dialogs.dialog;
@@ -52,10 +53,14 @@ class ProceedButtonPressed : OnClickHandler, Attachable {
     }
 
     try {
-      auto sim = new Simulator(data);
-      ulong score = sim.run.score;
-      RideResult[] result = sim.result;
-      // TODO
+      Simulator.instance.init(data).exec;
+      ulong score = Simulator.instance.score;
+
+      Attachable[string] content = [
+        "scoreText": new TextHolder(UIString.fromRaw(score.to!dstring))
+      ];
+
+      Application.instance.window("score").show(content);
     } catch (SimulatorException e) {
       src.window.showMessageBox("Error"d, e.msg.toUTF32);
     }

@@ -1,19 +1,14 @@
 module project.gui.abstractions.application;
 
 import project.common.exceptions : InvalidValueException;
+import project.common.utils : Singleton;
 import project.gui.abstractions.window;
 import dlangui;
 
 class Application {
   private WindowTemplate[string] _windows;
-  private static Application _instance;
 
-  private this() { }
-
-  static @property Application instance() {
-    if (this._instance is null) this._instance = new Application;
-    return this._instance;
-  }
+  mixin Singleton;
 
   @property string theme()
   { return Platform.instance.uiTheme; }
@@ -35,7 +30,6 @@ class Application {
   { return this._windows.get(id, null); }
 
   Application addWindow(WindowTemplate window) {
-    debug Log.i(window);
     if (window is null)
       throw new InvalidValueException("Can't add 'null' value as window.");
 

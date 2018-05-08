@@ -14,7 +14,7 @@ interface WindowInstantiator {
 abstract class DataHolder(T) {
   protected T _data;
 
-  this(in ref T data) {
+  this(T data) {
     this._data = data;
   }
 }

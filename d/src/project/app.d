@@ -19,14 +19,12 @@ extern (C) int UIAppMain(string[] args) {
     embeddedResourceList.addResources(embedResourcesFromList!"resources.list"());
   }
 
-  // initializing GUI builder at compile time
-  mixin GUIBuilder!queue builder;
-
   // creating windows and adding them to the application
-  foreach (window; builder.build()) {
+  foreach (window; GUIBuilder!queue.build) {
     Application.instance.addWindow(window);
   }
 
+  // showing main window
   Application.instance.window("main").show(null);
 
   // application execution

@@ -34,10 +34,11 @@ class BasicWindowInstantiator : WindowInstantiator {
     if (window is null)
       throw new InstantiationException("Error while instantiating a window.");
 
-    window.onClose = delegate() {
-      foreach (child; caller.childs) child.close();
-      caller.dropInstance();
-    };
+//     window.onClose = delegate() {
+//       //foreach (child; caller.childs) child.close();
+//       //caller.dropInstance();
+//       caller.close();
+//     };
 
     window.mainWidget = parseML(this._params.content);
 

@@ -1,25 +1,31 @@
 module project.algo.models.ride;
 
-public import project.algo.util : Pos;
+import project.common.utils : Pos;
 
-immutable class Ride {
-  uint id;
-  uint startStep;
-  uint finStep;
+struct RideParams {
   Pos start;
   Pos finish;
-
-  this(uint id, Pos start, Pos finish, uint startStep, uint finStep) immutable pure @nogc @safe nothrow {
-    this.id = id;
-    this.startStep = startStep;
-    this.finStep = finStep;
-    this.start = start;
-    this.finish = finish;
-  }
+  int startStep;
+  int finStep;
 }
 
-immutable struct RideResult {
-  Ride ride;
+class Ride {
+  immutable uint id;
+  private RideParams _params;
+
+  this(uint id, RideParams params) pure @nogc @safe nothrow {
+    this.id = id;
+    this._params = params;
+  }
+
+  @property RideParams params() const pure @nogc @safe nothrow
+  { return this._params; }
+
+  alias params this;
+}
+
+struct RideResult {
+  const Ride ride;
   bool assigned;
   bool bonused;
   bool scored;

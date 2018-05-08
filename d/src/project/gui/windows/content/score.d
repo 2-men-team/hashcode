@@ -4,8 +4,8 @@ import project.gui.windows.instantiator.instantiator;
 import dlangui;
 
 BasicWindowInstantiator instantiator;
-immutable string windowId = "score";
-immutable string parentId = "main";
+enum string windowId = "score";
+enum string parentId = "main";
 
 private enum string GUI = q{
   VerticalLayout {
@@ -17,15 +17,12 @@ private enum string GUI = q{
       fontSize: 20px
       textColor: "red"
       text: "Your score is:"
-      //visibility: Invisible
     }
     TextWidget {
       id: scoreText
       alignment: center
       fontSize: 30px
       textColor: "red"
-      text: "123"
-      //visibility: Invisible
     }
     VSpacer {}
     Button {

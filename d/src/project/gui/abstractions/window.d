@@ -21,12 +21,6 @@ class WindowTemplate {
     this._instantiator = instantiator;
   }
 
-//   ~this() {
-//     if (this._parent !is null) this.parent = null;
-//     foreach (child; this._childs.dup) destroy(child);
-//     this.close();
-//   }
-
   @property WindowTemplate parent()
   { return this._parent; }
 
@@ -47,6 +41,8 @@ class WindowTemplate {
     this._window = null;
     return instance;
   }
+
+  @property Window instance() { return this._window; }
 
   WindowTemplate addChild(WindowTemplate window) {
     if (window is null)
@@ -78,6 +74,7 @@ class WindowTemplate {
   { return this._childs.values; }
 
   void show(Attachable[string] data) {
+    this.close();
     this._window = this._instantiator.instantiate(this, data);
     this._window.show();
   }
@@ -90,5 +87,5 @@ class WindowTemplate {
     }
   }
 
-  alias _window this;
+  alias instance this;
 }
