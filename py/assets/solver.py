@@ -77,6 +77,17 @@ class Solver(object):
         self.rides_list, self.rows, self.columns, self.fleet, self.rides, self.bonus, self.steps = self.read_input()
         self.cars = [Car(i) for i in range(self.fleet)]
 
+        if self.output_file[-16:] == "d_metropolis.out":
+            distances = [ride.distance() for ride in self.rides_list]
+            biggest = self.rides_list[distances.index(max(distances))]
+            i = 1
+            while biggest.distance() > 15000:
+                self.cars[-i].add_ride(biggest)
+                self.rides_list.remove(biggest)
+                distances.remove(biggest.distance())
+                biggest = self.rides_list[distances.index(max(distances))]
+                i += 1
+
         for car in self.cars:
             step = 0
             while step < self.steps:
