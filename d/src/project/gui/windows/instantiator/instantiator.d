@@ -34,11 +34,9 @@ class BasicWindowInstantiator : WindowInstantiator {
     if (window is null)
       throw new InstantiationException("Error while instantiating a window.");
 
-//     window.onClose = delegate() {
-//       //foreach (child; caller.childs) child.close();
-//       //caller.dropInstance();
-//       caller.close();
-//     };
+    window.onClose = delegate() {
+      caller.close(false);
+    };
 
     window.mainWidget = parseML(this._params.content);
 
@@ -55,7 +53,10 @@ class BasicWindowInstantiator : WindowInstantiator {
     return window;
   }
 
-  private void _fillContent(Window target, Attachable[string] content) {
+  override void fillContent(Window target, Attachable[string] content) {
+    if (target is null)
+      throw new InvalidValueException("Can't fill content of 'null'.");
+
     foreach (id, item; content) {
       Widget widget = target.mainWidget.childById(id);
       if (widget is null)
@@ -67,7 +68,7 @@ class BasicWindowInstantiator : WindowInstantiator {
 
   override Window instantiate(WindowTemplate caller, Attachable[string] data) {
     Window instance = this._createWindow(caller);
-    this._fillContent(instance, data);
+    this.fillContent(instance, data);
     return instance;
   }
 }

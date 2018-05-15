@@ -36,13 +36,8 @@ class WindowTemplate {
   @property bool instantiated()
   { return this._window !is null; }
 
-  Window dropInstance() {
-    Window instance = this._window;
-    this._window = null;
-    return instance;
-  }
-
-  @property Window instance() { return this._window; }
+  @property Window instance()
+  { return this._window; }
 
   WindowTemplate addChild(WindowTemplate window) {
     if (window is null)
@@ -63,7 +58,7 @@ class WindowTemplate {
   }
 
   WindowTemplate removeChilds() {
-    foreach (id; this._childs.keys) this.removeChild(id);
+    foreach (id; this._childs.byKey) this.removeChild(id);
     return this;
   }
 
@@ -74,15 +69,19 @@ class WindowTemplate {
   { return this._childs.values; }
 
   void show(Attachable[string] data) {
-    this.close();
-    this._window = this._instantiator.instantiate(this, data);
-    this._window.show();
+    if (this.instantiated) {
+      this._instantiator.fillContent(this._window, data);
+      this._window.update(true);
+    } else {
+      this._window = this._instantiator.instantiate(this, data);
+      this._window.show();
+    }
   }
 
-  void close() {
-    foreach (child; this._childs) child.close();
-    if (this._window !is null) {
-      this._window.close();
+  void close(bool native = true) {
+    if (this.instantiated) {
+      foreach (child; this._childs) child.close();
+      if (native) this._window.close();
       this._window = null;
     }
   }

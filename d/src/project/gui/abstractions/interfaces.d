@@ -9,6 +9,7 @@ interface Attachable {
 
 interface WindowInstantiator {
   Window instantiate(WindowTemplate, Attachable[string]);
+  void fillContent(Window, Attachable[string]);
 }
 
 abstract class DataHolder(T) {

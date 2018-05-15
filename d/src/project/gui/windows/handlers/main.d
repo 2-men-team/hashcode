@@ -9,6 +9,7 @@ import std.path : sep = dirSeparator;
 import std.array : split;
 import std.utf : toUTF32, toUTF8;
 import std.conv : to;
+import std.file : write, FileException;
 
 import dlangui.dialogs.filedlg;
 import dlangui.dialogs.dialog;
@@ -28,7 +29,40 @@ class OpenFileButtonPressed : OnClickHandler, Attachable {
           return;
         }
 
-        src.window.mainWidget.childById("fileNameWidget").text = infile.toUTF32.split(sep)[$ - 1];
+        src.window.mainWidget.childById("openFileNameWidget").text = infile.toUTF32.split(sep)[$ - 1];
+      }
+    };
+
+    dialog.show();
+
+    return true;
+  }
+
+  override Attachable attachTo(Widget button) pure @safe nothrow {
+    button.click = this;
+    return this;
+  }
+}
+
+class SaveFileButtonPressed : OnClickHandler, Attachable {
+  override bool onClick(Widget src) {
+    auto dialog = new FileDialog(UIString.fromRaw("Save to file"d), src.window, null, FileDialogFlag.Save);
+
+    dialog.dialogResult = delegate(Dialog dlg, const(Action) action) {
+      if (action.id == ACTION_SAVE.id) {
+        string outfile = (cast(FileDialog) dlg).filename;
+
+        try {
+          string result = Simulator.instance.output;
+          if (result is null) {
+            src.window.showMessageBox("Error"d, "There is no data to save."d);
+            return;
+          }
+
+          outfile.write(result);
+          src.window.mainWidget.childById("saveFileNameWidget").text = outfile.toUTF32.split(sep)[$ - 1];
+        } catch (SimulatorException e) src.window.showMessageBox("Error"d, e.msg.toUTF32);
+        catch (FileException e) src.window.showMessageBox("Error"d, e.msg.toUTF32);
       }
     };
 
@@ -61,9 +95,7 @@ class ProceedButtonPressed : OnClickHandler, Attachable {
       ];
 
       Application.instance.window("score").show(content);
-    } catch (SimulatorException e) {
-      src.window.showMessageBox("Error"d, e.msg.toUTF32);
-    }
+    } catch (SimulatorException e) src.window.showMessageBox("Error"d, e.msg.toUTF32);
 
     return true;
   }

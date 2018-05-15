@@ -1,15 +1,15 @@
 {
 	"name": "course-work",
 	"authors": [
-		"Vladyslav Mokrousov",
-		"Vasyl Teliman <vasniktel@gmail.com>"
+		"Vasyl Teliman <vasniktel@gmail.com>",
+		"Vladyslav Mokrousov"
 	],
 	"homepage": "https://github.com/2-men-team/hashcode",
 	"targetName": "course-work",
 	"targetType": "executable",
 	"targetPath": "bin",
 	"dependencies": {
-		"dlangui": "~>0.9.177"
+		"dlangui": "~>0.9.178"
 	},
 	"subConfigurations": {
 		"dlangui": "x11"

@@ -12,7 +12,10 @@ private enum string GUI = q{
     backgroundColor: "#D3DAE3"
     margins: 10
     padding: 20
-    HorizontalLayout {
+
+    TableLayout {
+      colCount: 4
+
       TextWidget {
         fontSize: 15px
         text: "Choose file to load:"
@@ -21,15 +24,30 @@ private enum string GUI = q{
       ImageButton {
         drawableId: "fileopen"
         id: openFileButton
+        maxHeight: 40px
+      }
+      TextWidget {
+        id: openFileNameWidget
+        fontSize: 15px
+        fontItalic: true
+      }
+      TextWidget {
+        fontSize: 15px
+        text: "Choose file to save result:"
       }
       HSpacer {}
+      ImageButton {
+        drawableId: "fileopen"
+        id: saveFileButton
+        maxHeight: 40px
+      }
       TextWidget {
-        id: fileNameWidget
+        id: saveFileNameWidget
         fontSize: 15px
         fontItalic: true
       }
     }
-    VSpacer { minHeight: 5px}
+    VSpacer { minHeight: 5px }
     TextWidget {
       text: "Input data:"
       fontSize: 15px
@@ -53,7 +71,8 @@ private enum string GUI = q{
 
 private enum string[][string] GUIHandlers = [
   "proceedButton": ["project.gui.windows.handlers.main.ProceedButtonPressed"],
-  "openFileButton": ["project.gui.windows.handlers.main.OpenFileButtonPressed"]
+  "openFileButton": ["project.gui.windows.handlers.main.OpenFileButtonPressed"],
+  "saveFileButton": ["project.gui.windows.handlers.main.SaveFileButtonPressed"]
 ];
 
 static this() {

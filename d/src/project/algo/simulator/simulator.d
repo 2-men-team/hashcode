@@ -1,6 +1,6 @@
 module project.algo.simulator.simulator;
 
-import std.array : split, array;
+import std.array : split, array, join;
 import std.conv : to, ConvException;
 import std.algorithm : map, max = maxElement;
 import std.math : abs;
@@ -96,7 +96,7 @@ class Simulator {
   }
 
   /// Helper method to calculate "Manhattan distance"
-  private static uint _distance(Pos a, Pos b) pure @safe @nogc nothrow
+  static uint distance(Pos a, Pos b) pure @safe @nogc nothrow
   { return abs(b.x - a.x) + abs(b.y - a.y); }
 
   /**
@@ -131,7 +131,7 @@ class Simulator {
         !(line[3] < header[1]) ||
         !(line[4] < header[$ - 1]) ||
         !(
-          line[5] >= line[4] + Simulator._distance( Pos(line[1], line[0]), Pos(line[3], line[2]) ) &&
+          line[5] >= line[4] + Simulator.distance( Pos(line[1], line[0]), Pos(line[3], line[2]) ) &&
           line[5] <= header[$ - 1]
         )
       ) return false;
@@ -140,7 +140,7 @@ class Simulator {
     return true;
   }
 
-  @property const(RideResult)[] result() const @safe nothrow
+  @property RideResult[] result() const @safe nothrow
   { return this._result.dup; }
 
   @property ulong score() const pure @safe nothrow @nogc
@@ -158,8 +158,7 @@ class Simulator {
         if (ride.id !in rides) // was already assigned to another car
           throw new InvalidAlgorithmException("One ride is taken multiple times.");
 
-        long distToRide = Simulator._distance(pos, ride.start);
-        long rideLength = Simulator._distance(ride.start, ride.finish);
+        long distToRide = Simulator.distance(pos, ride.start);
         bool isBonused = false;
         bool isScored = false;
 
@@ -167,15 +166,16 @@ class Simulator {
           step += distToRide;
           if (step <= ride.startStep) { // can start on time
             this._score += this._bonus;
+            step = ride.startStep;
             isBonused = true;
           }
 
-          step += rideLength;
-          if (step <= this._totalSteps) { // car can finish this ride
-            this._score += rideLength;
+          step += ride.length;
+          if (step <= ride.finStep) { // car can finish this ride
+            this._score += ride.length;
             isScored = true;
           }
-        } else step += distToRide + rideLength; // if ride can't be finished, just add full ride length to car step
+        } else step += distToRide + ride.length; // if ride can't be finished, just add full ride length to car step
         pos = ride.finish; // change car position
 
         // if ride can't be finished by the end of the simulation,
@@ -193,19 +193,21 @@ class Simulator {
   }
 
   private long _rank(const Ride ride, const Car car, long maxStep) @safe pure @nogc nothrow {
-    long distToRide = Simulator._distance(car.pos, ride.start);
-    long rideLength = Simulator._distance(ride.start, ride.finish);
-    long fullLength = distToRide + rideLength;
+    long distToRide = Simulator.distance(car.pos, ride.start);
+    long fullLength = distToRide + ride.length;
 
     bool bonusValid = car.step + distToRide <= ride.startStep;
     bool scoreValid = car.step + fullLength <= ride.finStep;
 
     long k;
     if (maxStep <= ride.startStep) k = maxStep - ride.finStep;
-    else if (maxStep < ride.finStep) k = maxStep - ride.startStep + maxStep - ride.finStep;
-    else k = maxStep - ride.startStep;
+    else if (car.step < ride.startStep) {
+      if (maxStep < ride.finStep) k = maxStep - ride.startStep + maxStep - ride.finStep;
+      else k = maxStep - ride.startStep;
+    } else k = -fullLength;
 
-    return this._bonus * bonusValid + rideLength * scoreValid + k;
+    return (this._bonus * bonusValid) ^^ 2 + ride.length * scoreValid + k;
+    //return (ride.length + this._bonus) ^^ 2 - (distToRide * abs(ride.startStep - car.step - distToRide)) + k;
   }
 
   private auto _maxPair(Ride[uint] rides, Car[uint] cars, long maxStep) @safe pure @nogc nothrow {
@@ -233,7 +235,7 @@ class Simulator {
 
   Simulator exec() {
     if (!this.initialized)
-      throw new UninitializedException("Simulator wasn't initialized properly.");
+      throw new UninitializedException(UIString.fromRaw("Simulator wasn't initialized properly."d));
 
     Ride[uint] rides = this._rides.dup;
     Car[uint] cars = this._cars.dup;
@@ -244,7 +246,7 @@ class Simulator {
 
       with (pair) {
         car.addRide(ride);
-        car.step = car.step + Simulator._distance(car.pos, ride.start) + Simulator._distance(ride.start, ride.finish);
+        car.step = car.step + Simulator.distance(car.pos, ride.start) + ride.length;
 
         if (car.step >= this._totalSteps) {
           cars.remove(car.id);
@@ -258,5 +260,16 @@ class Simulator {
 
     this._calcScore();
     return this;
+  }
+
+  @property string output() {
+    if (!this.initialized)
+      throw new UninitializedException(UIString.fromRaw("Can't produce output: input data wasn't passed."d));
+
+    if (this._result is null) return null;
+
+    return this._cars.byValue.map!(car => (
+      (car.rides.length.to!string ~ car.rides.map!(ride => ride.id.to!string).array).join(' ')
+    )).join('\n');
   }
 }

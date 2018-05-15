@@ -1,16 +1,16 @@
 module project.gui.windows.holders.result;
 
 import project.gui.abstractions.interfaces : DataHolder, Attachable;
-import project.algo.models.ride : RideResult;
+import project.gui.windows.visualizer : VisualizerParams, Visualizer;
 import dlangui;
 
-class ResultHolder : DataHolder!(const RideResult[]), Attachable {
-  this(const RideResult[] data) {
+class ResultHolder : DataHolder!VisualizerParams, Attachable {
+  this(VisualizerParams data) {
     super(data);
   }
 
   override Attachable attachTo(Widget widget) {
-    // TODO
+    (cast(Visualizer) widget).init(super._data);
     return this;
   }
 }

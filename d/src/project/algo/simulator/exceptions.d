@@ -1,6 +1,5 @@
 module project.algo.simulator.exceptions;
 
-import std.utf : toUTF8;
 import project.common.exceptions;
 import dlangui;
 
@@ -22,8 +21,8 @@ class InvalidAlgorithmException : ImplementationException {
   }
 }
 
-class UninitializedException : ImplementationException {
-  this(string msg, string file = __FILE__, size_t line = __LINE__) {
+class UninitializedException : SimulatorException {
+  this(UIString msg, string file = __FILE__, size_t line = __LINE__) {
     super(msg, file, line);
   }
 }
