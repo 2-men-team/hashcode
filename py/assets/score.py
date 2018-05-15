@@ -44,7 +44,7 @@ class Score(object):
         (self.rides_list, self.rows, self.columns, self.fleet, self.rides, self.bonus, self.steps) = self.read_input()
         self.read_output() # read output
         for x in range(len(self.cars_rides)):
-            car = Car(x) # instantiate Car object
+            car = Car(x) # instantiate Car
             for id in self.cars_rides[x]: # loop through all rides that assigned to car
                 ride = self.rides_list[id] # get certain ride
                 self.score_ride(car,ride) # score the ride
@@ -70,6 +70,8 @@ class Score(object):
             car.add_ride(ride)
             return True
         else:  # car is late, so no points added
+            if car.early_start(ride): # If it is early start, then add bonus
+                self.bonus_score += self.bonus  # bonus points
             car.step = car.finish_time(ride) # change current step
             car.x = ride.end_x # change car position
             car.y = ride.end_y # change car position
