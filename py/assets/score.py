@@ -6,21 +6,21 @@ class Score(object):
     """Class to get the total score of submission."""
     def __init__(self, raw, file_out):
         """Initializing function. Initializes starting parameters for simulation."""
-        self.raw = raw
-        self.output_file = file_out
-        self.distance_score = 0
-        self.bonus_score = 0
+        self.raw = raw # raw data
+        self.output_file = file_out # output file
+        self.distance_score = 0 # score only for distances
+        self.bonus_score = 0 # score only for bonuses
 
         # simulation parameters
-        self.rows = 0
-        self.columns = 0
-        self.cars = 0
-        self.fleet = 0
-        self.rides = 0
-        self.rides_list = 0
-        self.bonus = 0
-        self.steps = 0
-        self.cars_rides = 0
+        self.rows = 0 # number of rows
+        self.columns = 0 # number of columns
+        self.cars = 0 # array of Car objects
+        self.fleet = 0 # number of cars
+        self.rides = 0 # number of rides
+        self.rides_list = 0 # array of Ride objects
+        self.bonus = 0 # bonus for achieving ride on time
+        self.steps = 0 # number of steps in simulation
+        self.cars_rides = 0 # cars with assigned rides
 
     def total(self):
         """Returns total obtained score."""
@@ -40,7 +40,7 @@ class Score(object):
         return rides_list, rows, columns, fleet, rides, bonus, steps
 
     def score(self):
-        """Score all rides all of cars."""
+        """Score all rides of all cars."""
         (self.rides_list, self.rows, self.columns, self.fleet, self.rides, self.bonus, self.steps) = self.read_input()
         self.read_output() # read output
         for x in range(len(self.cars_rides)):
@@ -50,10 +50,10 @@ class Score(object):
                 self.score_ride(car,ride) # score the ride
 
     def read_output(self):
-        """Function to read the result of submited file."""
+        """Function to read the result of submission file."""
         with open(self.output_file) as file:
             res_array = file.read().split("\n") # split data
-            del res_array[-1]
+            del res_array[-1] # delete last empty string
             res_array = [x.split(" ") for x in res_array]
             self.cars_rides = [] # get rides assigned to crtain cars
             clean(res_array) # clean data
@@ -63,11 +63,11 @@ class Score(object):
 
     def score_ride(self, car, ride):
         """Get the score of certain ride."""
-        if car.ride_scored(ride, self.steps):
+        if car.ride_scored(ride, self.steps): # if the car finish ride on time
             if car.early_start(ride): # If it is early start, then add bonus
                 self.bonus_score += self.bonus  # bonus points
             self.distance_score += ride.distance() # add the ride distance
-            car.add_ride(ride)
+            car.add_ride(ride) # assign ride to car
             return True
         else:  # car is late, so no points added
             if car.early_start(ride): # If it is early start, then add bonus

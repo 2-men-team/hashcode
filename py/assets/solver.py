@@ -48,34 +48,24 @@ class Solver(object):
     def read_input(self):
         """Function to parse raw data."""
         res_array = self.raw.split("\n")
-        res_array = [x.split(" ") for x in res_array]
+        res_array = [x.split(" ") for x in res_array] # split data
         clean(res_array) # clean data
         rows, columns, cars, rides, bonus, steps = tuple([int(x) for x in res_array[0]])
         del res_array[0] # delete global simulation params from data
         rides_list = [] # create list of Ride objects with certain parameters
         for i in range(len(res_array)):
             ride = tuple([int(x) for x in res_array[i]])
-            rides_list.append(Ride(i,*ride))
+            rides_list.append(Ride(i,*ride)) # create list of Ride objects
         return rides_list, rows, columns, cars, rides, bonus, steps
 
     def score(self, car, ride, step):
         """Heuristic function to calculate the effectiveness of ride."""
-        # 46345713
         dist_to_ride = car.distance_to_start(ride)
-        ride_score = self.a*ride.distance() - self.b*max(dist_to_ride, ride.early - step) # choosing the ride withleast dist_to_ride
+        ride_score = self.a*ride.distance() - self.b*max(dist_to_ride, ride.early - step) # calculate heuristic function
 
         if (ride.early > step + dist_to_ride):
             ride_score += self.bonus
         return ride_score
-
-        # 44375682
-        #scored = 0
-        #if (car.finish_time(ride) < ride.fin_time):
-        #    scored += ride.distance()
-        #if ride.early > step + dist_to_ride:
-        #    scored += self.bonus - car.wait_time(ride)
-        #scored -= dist_to_ride
-        #return scored
 
     def print_result(self):
         """Write output to file."""
@@ -91,24 +81,24 @@ class Solver(object):
         for each car, assign it the most effective rides until the time runs out.
         Greedy approach."""
         self.rides_list, self.rows, self.columns, self.fleet, self.rides, self.bonus, self.steps = self.read_input()
-        self.cars = [Car(i) for i in range(self.fleet)]
+        self.cars = [Car(i) for i in range(self.fleet)] # array of Car objects
 
-        for car in self.cars:
+        for car in self.cars: # loop through cars
             step = 0
             while step < self.steps:
                 best_ride_score = -1000000
                 best_ride = None
-                for ride in self.rides_list:
-                    if not self.reachable(car, ride, step): continue
-                    scored = self.score(car, ride, step)
+                for ride in self.rides_list: # loop through all rides
+                    if not self.reachable(car, ride, step): continue # get only reachable rides
+                    scored = self.score(car, ride, step) # score tide
                     if scored >= best_ride_score: # check if it is a best ride
                         best_ride = ride
                         best_ride_score = scored
-                if best_ride is not None:
+                if best_ride is not None: # check if best ride was chosen
                     step += max(car.distance_to_start(best_ride), best_ride.early - step) + best_ride.distance() # update the time
                     car.add_ride(best_ride) # assign the ride to car
                     self.rides_list.remove(best_ride) # remove from rides
                 else: break # Break when the time runs out or no no more rides
 
-        self.print_result()
+        self.print_result() # print the results to output file
         return self.cars

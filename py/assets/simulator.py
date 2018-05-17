@@ -8,25 +8,23 @@ class Simulator(object):
         """Run the validation for the data;
         If data is valid, then runs Solver to solve it and Score to obtain
         the total score of solution."""
-        self.raw = raw
+        self.raw = raw # raw data
 
         # solve if raw is valid
         if self.validate():
-            self.solver = Solver(raw, file_out, file_in)
-            self.solver.solve()
-            self.scorer = Score(raw, file_out)
-            self.scorer.score()
-            self.score = self.scorer.total()
+            self.solver = Solver(raw, file_out, file_in) # instantiate Solver
+            self.solver.solve() # solve problem
+            self.scorer = Score(raw, file_out) # instantiate Score
+            self.scorer.score() # score the result
+            self.score = self.scorer.total() # get the total score
 
     def validate(self):
         """Function to check if the input data is valid."""
         valid = True
         try:
-            # splitting the data into arrays
-            res_array = self.raw.split("\n")
+            res_array = self.raw.split("\n") # splitting the data into arrays
             res_array = [x.split(" ") for x in res_array]
-            # cleaning missing data
-            clean(res_array)
+            clean(res_array) # cleaning missing data
 
             res_array[0] = [int(x) for x in res_array[0]]
             for i in range(1, len(res_array)):
@@ -41,6 +39,6 @@ class Simulator(object):
                 if res_array[i][4] > res_array[0][5] or res_array[i][4] < 0: valid = False
                 if res_array[i][5] > res_array[0][5] or res_array[i][5] < 0: valid = False
                 if not valid: break
-        except (ValueError, TypeError, AttributeError):
+        except (ValueError, TypeError, AttributeError): # catch errors
             valid = False
         return valid

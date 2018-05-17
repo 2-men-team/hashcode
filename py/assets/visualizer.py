@@ -9,22 +9,18 @@ class Visualizer(object):
     def __init__(self, canv, raw, file_out):
         """Initializes starting parameters for simulation."""
         self.canv = canv # canvas widget
-        self.raw = raw
-        self.output_file = file_out
-
-        # input and output
-        self.input = 0
-        self.output = 0
+        self.raw = raw # raw data
+        self.output_file = file_out # output file
 
         # simulation parameters
-        self.rows = 0
-        self.columns = 0
-        self.cars = 0
-        self.fleet = 0
-        self.rides = 0
-        self.rides_list = 0
-        self.bonus = 0
-        self.steps = 0
+        self.rows = 0 # number of rows
+        self.columns = 0 # number of columns
+        self.cars = 0 # array of Car objects
+        self.fleet = 0 # number of cars
+        self.rides = 0 # number of rides
+        self.rides_list = 0 # array of Ride objects
+        self.bonus = 0 # bonus
+        self.steps = 0 # total steps in simulation
 
     def parsed_output(self):
         """Function to parse output file."""
@@ -37,7 +33,7 @@ class Visualizer(object):
             for i in range(len(res_array)):
                 res_array[i] = [int(x) for x in res_array[i]] # convert to integer
                 self.cars_rides.append(res_array[i][1:])
-        cars = [] # create array of cars
+        cars = [] # create array of carsu
         for x in range(self.fleet):
             cars.append(Car(x)) # create Car object
             cars[-1].rides += self.cars_rides[x] # assign to car it's rides
@@ -49,7 +45,7 @@ class Visualizer(object):
         res_array = [x.split(" ") for x in res_array] # split into array of arrays
         clean(res_array) # clean data
         self.rows, self.columns, self.fleet, self.rides, self.bonus, self.steps = tuple([int(x) for x in res_array[0]])
-        del res_array[0]
+        del res_array[0] # delete array with global parameters
         self.rides_list = []
         for i in range(len(res_array)):
             ride = tuple([int(x) for x in res_array[i]])
@@ -62,22 +58,22 @@ class Visualizer(object):
         self.cars = self.parsed_output() # get array of Car objects
 
         for x in range(100): # visualize 100 tandom rides
-            ride_id = random.randint(0, len(self.rides_list)-1) if(len(self.rides_list) > 100) else x # get id of ride
+            ride_id = random.randint(0, len(self.rides_list)-1) if(len(self.rides_list) > 100) else x # pick random ride
             ride = self.rides_list[ride_id] # get Ride object by id
             current_car = self.find(ride) # find car, which this ride was assigned to
             bonus_color, ride_color = self.color(ride, current_car) # find colors for this ride
             self.draw(ride, bonus_color, ride_color) # draw ride
 
     def find(self, ride):
-        """CHeck if the was assigned to car"""
+        """Find Car to which the ride was assigned"""
         for car in self.cars:
             if ride.id in car.rides:
                 return car
-        return None
+        return None # return None if the ride wasn't assigned
 
     def color(self, ride, car):
         """Get the color of ride."""
-        if car is None:
+        if car is None: # the ride wasn't taken
             return "red", "red"
 
         car.x = 0 # initialize car coordinate x
@@ -105,7 +101,8 @@ class Visualizer(object):
             ride_color = 'green'
         else:
             ride_color = 'orange'
-        if bonus_color != 'yellow':
+
+        if bonus_color != 'yellow': # set default bonus color if it wasn't defined
             bonus_color = ride_color
         return bonus_color, ride_color
 

@@ -1,8 +1,7 @@
 from tkinter import filedialog
 from tkinter import messagebox
-import tkinter.scrolledtext
+from tkinter import scrolledtext
 from tkinter import *
-import tkinter
 from assets.simulator import Simulator
 from assets.visualizer import Visualizer
 
@@ -10,7 +9,7 @@ from assets.visualizer import Visualizer
 # Simulator - class to simulate the process
 # Visualizer - class for visualizing the results
 
-class Window(Frame):
+class Window(Frame): # inherits from Frame
     def create_widgets(self):
         """Function to create widgets on main window.
         Creates: input file button, output file button, fields
@@ -18,7 +17,7 @@ class Window(Frame):
         Proceed button."""
 
         # Button to determine file for output
-        self.output = tkinter.Button(self, text="Output", command=self.upload_output, width=22, height=1)
+        self.output = Button(self, text="Output", command=self.upload_output, width=22, height=1)
         self.output.grid(row=0, column=1, pady=(0,10))
 
         # Text field, that shows path to output file
@@ -26,7 +25,7 @@ class Window(Frame):
         self.text_file_output.grid(row=0, column=2, pady=(0,5), padx=(5,5))
 
         # Button to upload input file
-        self.input = tkinter.Button(self, text="Input", command=self.upload_input, width=22, height=1)
+        self.input = Button(self, text="Input", command=self.upload_input, width=22, height=1)
         self.input.grid(row=1, column=1, pady=(0,10))
 
         # Text field, that shows path to input file
@@ -39,7 +38,7 @@ class Window(Frame):
         self.text.grid(row=2, column=1, columnspan=2)
 
         # Process button
-        self.proceed = tkinter.Button(self)
+        self.proceed = Button(self)
         self.proceed["text"] = "Process"
         self.proceed["command"] = self.process
         self.proceed["width"] = 30
@@ -93,7 +92,7 @@ class Window(Frame):
             return None
 
     def process(self):
-        """Function get raw data and passes it to Simulator, catches errors."""
+        """Function get raw data and passes it to Simulator."""
         self.raw = self.text.get(1.0, 'end')
         success = True # flag to check if data is valid
         try:
@@ -112,44 +111,48 @@ class Window(Frame):
 
     def score_dialogue(self):
         """Function to generate modal score window."""
-        dlg = Toplevel()
-        dlg.wm_title("Result")
-        dlg.geometry("210x100")
-        dlg.resizable(width=False, height=False)
-        text = "\t" + str(self.simulator.score)
-        l = Label(dlg, text="\tYour score is :")
+        dlg = Toplevel() # instantiate modal window
+        dlg.wm_title("Result") # set title
+        dlg.geometry("210x100") # set resolution
+        dlg.resizable(width=False, height=False) # set resizable to false
+        text = str(self.simulator.score) # get score text
+        l = Label(dlg, text="Your score is :")
         s = Label(dlg, text=text)
-        l.grid(row=0, column=0)
-        s.grid(row=1, column=0)
+        l.grid(row=0, column=0) # set grid
+        s.grid(row=1, column=0) # set grid
 
-        b = Button(dlg, text="visualize", command=self.visualize)
+        # create visualize button
+        b = Button(dlg, text="visualize", command=self.visualize, pady=10)
         b.grid(row=2, column=0)
         b["width"] = 15
         b["padx"] = 4
 
-        dlg.wait_window(dlg)
+        # a small trick to align the elements of modal window in center
+        canvas = Canvas(dlg, width=210, height=100) # there is no use for
+        canvas.grid(row=3, column=0)
+
+        dlg.wait_window(dlg) # ask window to be open
 
     def visualize(self):
         """Function to generate modal window for visualization."""
-        vis = Toplevel()
-        vis.wm_title("Visualization")
-        vis.geometry("801x601")
-        vis.configure(background="#abb1b2")
-        vis.resizable(width=False, height=False)
-        generator = Button(vis, text="Generate new!", command=self.generate, pady=10)
-        generator.grid(row=1, column=0)
-        # create canvas widget
-        self.canv = Canvas(vis, width=800, height=600, background="#abb1b2")
+        vis = Toplevel() # instantiate visualization modal window
+        vis.wm_title("Visualization") # set title
+        vis.geometry("801x601") # set resolution
+        vis.configure(background="#abb1b2") # set background
+        vis.resizable(width=False, height=False) # set resizable
+        generator = Button(vis, text="Generate new!", command=self.generate, pady=10) # create generate button
+        generator.grid(row=1, column=0) # set grid
+        self.canv = Canvas(vis, width=800, height=600, background="#abb1b2", highlightthickness=0) # create canvas widget for visualization
         self.canv.grid(row=2,column=0)
 
         vis.grab_set()
-        vis.wait_window(vis)
+        vis.wait_window(vis) # ask window to be open
 
     def generate(self):
-        """Function to emit visualizatio event."""
+        """Function to emit visualization event."""
         self.canv.delete("all") # clear canvas
-        visualizer = Visualizer(self.canv, self.raw, self.file_out)
-        visualizer.visualize()
+        visualizer = Visualizer(self.canv, self.raw, self.file_out) # instantiate Visualizer
+        visualizer.visualize() # visualize results
 
     def show(self):
-        self.root.mainloop()
+        self.root.mainloop() # run program

@@ -5,7 +5,7 @@ class Car(object):
         self.x = 0 # current x coordinate
         self.y = 0 # current y coordinate
         self.rides = [] # ride ids assigned to the car
-        self.step = 0 # current step
+        self.step = 0 # current step for car
 
     def distance_to_pos(self,end_x,end_y):
         """Calculate distance from car to certain position."""
