@@ -3,23 +3,23 @@ from .score import Score
 from .clean import clean
 
 class Simulator(object):
-    '''Class to simulate the whole solution process.'''
-    def __init__(self, raw, file_out):
-        '''Run the validation for the data;
+    """Class to simulate the whole solution process."""
+    def __init__(self, raw, file_out, file_in=None):
+        """Run the validation for the data;
         If data is valid, then runs Solver to solve it and Score to obtain
-        the total score of solution.'''
+        the total score of solution."""
         self.raw = raw
 
         # solve if raw is valid
         if self.validate():
-            self.solver = Solver(raw, file_out)
+            self.solver = Solver(raw, file_out, file_in)
             self.solver.solve()
             self.scorer = Score(raw, file_out)
             self.scorer.score()
             self.score = self.scorer.total()
 
     def validate(self):
-        '''Function to check if the input data is valid.'''
+        """Function to check if the input data is valid."""
         valid = True
         try:
             # splitting the data into arrays

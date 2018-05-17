@@ -3,9 +3,9 @@ from .ride import Ride
 from .clean import clean
 
 class Score(object):
-    '''Class to get the total score of submission.'''
+    """Class to get the total score of submission."""
     def __init__(self, raw, file_out):
-        '''Initializing function. Initializes starting parameters for simulation.'''
+        """Initializing function. Initializes starting parameters for simulation."""
         self.raw = raw
         self.output_file = file_out
         self.distance_score = 0
@@ -23,11 +23,11 @@ class Score(object):
         self.cars_rides = 0
 
     def total(self):
-        '''Returns total obtained score.'''
+        """Returns total obtained score."""
         return self.distance_score + self.bonus_score
 
     def read_input(self):
-        '''Function to parse input raw data.'''
+        """Function to parse input raw data."""
         res_array = self.raw.split("\n") # split data into arrays
         res_array = [x.split(" ") for x in res_array]
         clean(res_array) # clean missing data
@@ -40,7 +40,7 @@ class Score(object):
         return rides_list, rows, columns, fleet, rides, bonus, steps
 
     def score(self):
-        '''Score all rides all of cars.'''
+        """Score all rides all of cars."""
         (self.rides_list, self.rows, self.columns, self.fleet, self.rides, self.bonus, self.steps) = self.read_input()
         self.read_output() # read output
         for x in range(len(self.cars_rides)):
@@ -50,7 +50,7 @@ class Score(object):
                 self.score_ride(car,ride) # score the ride
 
     def read_output(self):
-        '''Function to read the result of submited file.'''
+        """Function to read the result of submited file."""
         with open(self.output_file) as file:
             res_array = file.read().split("\n") # split data
             del res_array[-1]
@@ -62,7 +62,7 @@ class Score(object):
                 self.cars_rides.append(res_array[i][1:])
 
     def score_ride(self, car, ride):
-        '''Get the score of certain ride.'''
+        """Get the score of certain ride."""
         if car.ride_scored(ride, self.steps):
             if car.early_start(ride): # If it is early start, then add bonus
                 self.bonus_score += self.bonus  # bonus points

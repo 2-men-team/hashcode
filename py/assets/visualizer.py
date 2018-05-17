@@ -5,9 +5,9 @@ import random
 import math
 
 class Visualizer(object):
-    '''Class for visualization of submission.'''
+    """Class for visualization of submission."""
     def __init__(self, canv, raw, file_out):
-        '''Initializes starting parameters for simulation.'''
+        """Initializes starting parameters for simulation."""
         self.canv = canv # canvas widget
         self.raw = raw
         self.output_file = file_out
@@ -27,7 +27,7 @@ class Visualizer(object):
         self.steps = 0
 
     def parsed_output(self):
-        '''Function to parse output file.'''
+        """Function to parse output file."""
         with open(self.output_file) as file:
             res_array = file.read().split("\n") # read data
             del res_array[-1] # delete last element ''
@@ -44,7 +44,7 @@ class Visualizer(object):
         return cars # return array of Car objects
 
     def parsed_input(self):
-        '''Function to parse input raw data.'''
+        """Function to parse input raw data."""
         res_array = self.raw.split("\n") # split data
         res_array = [x.split(" ") for x in res_array] # split into array of arrays
         clean(res_array) # clean data
@@ -57,9 +57,10 @@ class Visualizer(object):
         return self.rows, self.columns, self.fleet, self.rides, self.bonus, self.steps
 
     def visualize(self):
-        '''Visualization function.'''
+        """Visualization function."""
         self.rows, self.columns, self.fleet, self.rides, self.bonus, self.steps = self.parsed_input()
         self.cars = self.parsed_output() # get array of Car objects
+
         for x in range(100): # visualize 100 tandom rides
             ride_id = random.randint(0, len(self.rides_list)-1) if(len(self.rides_list) > 100) else x # get id of ride
             ride = self.rides_list[ride_id] # get Ride object by id
@@ -68,14 +69,14 @@ class Visualizer(object):
             self.draw(ride, bonus_color, ride_color) # draw ride
 
     def find(self, ride):
-        '''CHeck if the was assigned to car'''
+        """CHeck if the was assigned to car"""
         for car in self.cars:
             if ride.id in car.rides:
                 return car
         return None
 
     def color(self, ride, car):
-        '''Get the color of ride.'''
+        """Get the color of ride."""
         if car is None:
             return "red", "red"
 
@@ -109,15 +110,15 @@ class Visualizer(object):
         return bonus_color, ride_color
 
     def draw(self, ride, bonus_color, ride_color):
-        '''Draw the ride on canvas.'''
+        """Draw the ride on canvas."""
         scale_x = int(self.canv['width'])/self.rows # calc the x axis scale
-        scale_y = int(self.canv['height'])/self.columns # calc the y axis scale
+        scale_y = int(self.canv['height'])/(1.1*self.columns) # calc the y axis scale
 
         # scale coordinates
         start_x_scaled = math.floor(ride.start_x*scale_x)
-        start_y_scaled = math.floor(int(self.canv['height']) - ride.start_y*scale_y) - 25
+        start_y_scaled = math.floor(int(self.canv['height']) - ride.start_y*scale_y)-40
         end_x_scaled = math.floor(ride.end_x*scale_x)
-        end_y_scaled = math.floor(int(self.canv['height']) - ride.end_y*scale_y) - 25
+        end_y_scaled = math.floor(int(self.canv['height']) - ride.end_y*scale_y)-40
 
         # create 4 points to draw dot
         x1, y1 = (start_x_scaled - 3), (start_y_scaled - 3)

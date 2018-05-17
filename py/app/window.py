@@ -12,10 +12,10 @@ from assets.visualizer import Visualizer
 
 class Window(Frame):
     def create_widgets(self):
-        '''Function to create widgets on main window.
+        """Function to create widgets on main window.
         Creates: input file button, output file button, fields
         to these files; text field with content of input file;
-        Proceed button.'''
+        Proceed button."""
 
         # Button to determine file for output
         self.output = tkinter.Button(self, text="Output", command=self.upload_output, width=22, height=1)
@@ -46,8 +46,8 @@ class Window(Frame):
         self.proceed.grid(row=3, column=1, pady=(14,0), columnspan=2)
 
     def __init__(self, master=None):
-        ''' Initializing function. Setting the width, height window parameters.
-        Setting the resizable parameter to False, configuring the grid of window.'''
+        """ Initializing function. Setting the width, height window parameters.
+        Setting the resizable parameter to False, configuring the grid of window."""
 
         self.root = master
         self.root.geometry("1024x768")
@@ -63,7 +63,7 @@ class Window(Frame):
         self.create_widgets()
 
     def upload_input(self):
-        '''Function to upload the input file. '''
+        """Function to upload the input file. """
         # Asking for the input file name.
         self.root.filename = filedialog.askopenfilename(initialdir = "/home/napoleon/course_work/realization",title = "Select file",filetypes = (("input files","*.in"),("all files","*.*")))
 
@@ -78,13 +78,13 @@ class Window(Frame):
             self.text_file_input.insert(0, self.root.filename)
 
     def upload_output(self):
-        '''Function to get the name of output file.'''
+        """Function to get the name of output file."""
         self.file_out = filedialog.askopenfilename(initialdir = "/home/napoleon/course_work/realization",title = "Select file",filetypes = (("output files","*.out"),("all files","*.*")))
         self.text_file_output.delete(0, 'end')
         self.text_file_output.insert(0, self.file_out)
 
     def read(self, input_file):
-        '''Function to read the contents of input file.'''
+        """Function to read the contents of input file."""
         try:
             with open(input_file) as file:
                 return file.read()
@@ -93,14 +93,15 @@ class Window(Frame):
             return None
 
     def process(self):
-        '''Function get raw data and passes it to Simulator, catches errors.'''
+        """Function get raw data and passes it to Simulator, catches errors."""
         self.raw = self.text.get(1.0, 'end')
         success = True # flag to check if data is valid
         try:
-            self.simulator = Simulator(self.raw, self.file_out)
-        except AttributeError:
+            self.simulator = Simulator(self.raw, self.file_out, self.root.filename)
+        except AttributeError as e:
             success = False
             messagebox.showerror("Error", "One or both files are missing!")
+            print(e)
 
         # show result score
         if success:
@@ -110,7 +111,7 @@ class Window(Frame):
                 messagebox.showerror("Error", "Invalid input file format!")
 
     def score_dialogue(self):
-        '''Function to generate modal score window.'''
+        """Function to generate modal score window."""
         dlg = Toplevel()
         dlg.wm_title("Result")
         dlg.geometry("210x100")
@@ -129,7 +130,7 @@ class Window(Frame):
         dlg.wait_window(dlg)
 
     def visualize(self):
-        '''Function to generate modal window for visualization.'''
+        """Function to generate modal window for visualization."""
         vis = Toplevel()
         vis.wm_title("Visualization")
         vis.geometry("801x601")
@@ -145,7 +146,10 @@ class Window(Frame):
         vis.wait_window(vis)
 
     def generate(self):
-        '''Function to emit visualizatio event.'''
+        """Function to emit visualizatio event."""
         self.canv.delete("all") # clear canvas
         visualizer = Visualizer(self.canv, self.raw, self.file_out)
         visualizer.visualize()
+
+    def show(self):
+        self.root.mainloop()

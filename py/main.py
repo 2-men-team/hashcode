@@ -11,6 +11,4 @@ if __name__ == "__main__":
     root = Tk()
     root.title("Hashcode")
     window = Window(root)
-
-    # running program
-    root.mainloop()
+    window.show()
