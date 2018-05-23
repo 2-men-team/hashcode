@@ -3,10 +3,15 @@ module project.gui.windows.content.main;
 import project.gui.windows.instantiator.instantiator;
 import dlangui;
 
+/**
+ * Main window content description
+ */
+
 BasicWindowInstantiator instantiator;
 enum string windowId = "main";
 enum string parentId = null;
 
+/// Window content described in DML language
 private enum string GUI = q{
   VerticalLayout {
     backgroundColor: "#D3DAE3"
@@ -69,12 +74,14 @@ private enum string GUI = q{
   }
 };
 
+/// Handlers assigned to specific widgets
 private enum string[][string] GUIHandlers = [
   "proceedButton": ["project.gui.windows.handlers.main.ProceedButtonPressed"],
   "openFileButton": ["project.gui.windows.handlers.main.OpenFileButtonPressed"],
   "saveFileButton": ["project.gui.windows.handlers.main.SaveFileButtonPressed"]
 ];
 
+/// Module constructor
 static this() {
   WindowInitParams params = {
     caption: UIString.fromRaw("Course work"d),

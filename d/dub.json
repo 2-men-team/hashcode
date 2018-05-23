@@ -5,7 +5,7 @@
 		"Vladyslav Mokrousov"
 	],
 	"homepage": "https://github.com/2-men-team/hashcode",
-	"targetName": "course-work",
+	"targetName": "course-work-d",
 	"targetType": "executable",
 	"targetPath": "bin",
 	"dependencies": {
@@ -14,8 +14,6 @@
 	"subConfigurations": {
 		"dlangui": "x11"
 	},
-	"versions": [],
-	"stringImportPaths": ["views", "views/res", "views/res/mdpi", "views/res/hdpi"],
 	"description": "Course work based on Google HashCode 2018 task",
 	"copyright": "Copyright © 2018, Vladyslav Mokrousov and Vasyl Teliman",
 	"license": "MIT"

@@ -14,11 +14,6 @@ extern (C) int UIAppMain(string[] args) {
   Application.instance.theme = "theme_default";
   Application.instance.language = "en";
 
-  // add resources if any
-  version (WITH_RESOURCES) {
-    embeddedResourceList.addResources(embedResourcesFromList!"resources.list"());
-  }
-
   // creating windows and adding them to the application
   foreach (window; GUIBuilder!queue.build) {
     Application.instance.addWindow(window);
