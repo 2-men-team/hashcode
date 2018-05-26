@@ -17,10 +17,8 @@ private enum string GUI = q{
     backgroundColor: "#D3DAE3"
     margins: 10
     padding: 20
-
     TableLayout {
       colCount: 4
-
       TextWidget {
         fontSize: 15px
         text: "Choose file to load:"

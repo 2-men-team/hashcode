@@ -17,14 +17,6 @@ struct VisualizerParams {
   RideResult[] data; // data to visualize
 }
 
-/// Ride status colors
-private enum StatusColor : uint {
-  Taken = 0x008000, // Ride was taken and scored - Green
-  NotScored = 0xffa500, // Ride wasn't scored - Orange
-  Missed = 0xff0000, // Ride wasn't taken - Red
-  Bonused = 0xffff00 // Ride was bonused - Yellow
-}
-
 /// Shrink factor to apply to visualization data
 private enum int shrinkFactor = 5;
 
@@ -49,17 +41,17 @@ class Visualizer : CanvasWidget {
   private auto _checkStatus(RideResult ride) {
     // struct to hold StatusColor
     struct Status {
-      StatusColor point; // color of the start point
-      StatusColor path; // color of a whole path
+      Color point; // color of the start point
+      Color path; // color of a whole path
     }
 
     Status result;
 
     // calculate color of the Ride
-    if (!ride.assigned) result = Status(StatusColor.Missed, StatusColor.Missed);
+    if (!ride.assigned) result = Status(Color.red, Color.red);
     else {
-      result.path = ride.scored ? StatusColor.Taken : StatusColor.NotScored;
-      result.point = ride.bonused ? StatusColor.Bonused : result.path;
+      result.path = ride.scored ? Color.green : Color.orange;
+      result.point = ride.bonused ? Color.yellow : result.path;
     }
 
     return result;
