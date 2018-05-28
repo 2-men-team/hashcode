@@ -26,7 +26,7 @@ package(project.algo) class Car {
   @property Pos pos(Pos newPos) { return this._pos = newPos; }
 
   /// rides getter
-  @property Ride[] rides() @safe nothrow
+  @property Ride[] rides()
   { return this._rides.dup; }
 
   /// assign a ride

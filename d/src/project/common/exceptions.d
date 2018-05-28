@@ -1,9 +1,9 @@
 module project.common.exceptions;
 
+/// Implements exceptions used in a project
+
 import std.utf : toUTF8;
 import dlangui;
-
-/// Implements exceptions used in a project
 
 /// Base class for all project exceptions
 class ProjectException : Exception {
