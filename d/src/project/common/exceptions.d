@@ -3,6 +3,8 @@ module project.common.exceptions;
 import std.utf : toUTF8;
 import dlangui;
 
+/// Implements exceptions used in a project
+
 /// Base class for all project exceptions
 class ProjectException : Exception {
   this(string msg, string file = __FILE__, size_t line = __LINE__) {

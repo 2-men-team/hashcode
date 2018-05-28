@@ -1,5 +1,7 @@
 module project.algo.simulator.simulator;
 
+/// Implements main algorithm
+
 import std.array : split, array, join;
 import std.conv : to, ConvException;
 import std.algorithm : map, max, fold;
@@ -112,8 +114,9 @@ class Simulator {
   static bool validate(const uint[][] data) {
     if (data.length == 0) return false;
 
-    const uint[] header = data[0];
+    const uint[] header = data[0]; // header data description
 
+    // validate header
     if (header.length != Validation.contentDescriptionLength)
       return false;
 
@@ -125,11 +128,13 @@ class Simulator {
     }
     if (!(header[$ - 1] >= 1 && header[$ - 1] <= Validation.maxSteps)) return false;
 
+    // validate data
     if (data.length != header[3] + 1) return false;
     foreach (line; data[1 .. $]) {
       if (line.length != Validation.contentDescriptionLength)
         return false;
 
+      // validate ride data
       if (
         !(line[0] < header[0]) ||
         !(line[1] < header[1]) ||

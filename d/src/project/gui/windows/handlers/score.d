@@ -1,5 +1,7 @@
 module project.gui.windows.handlers.score;
 
+/// Implements event handlers for the 'score' window
+
 import project.gui.abstractions.interfaces : Attachable;
 import project.gui.abstractions : Application;
 import project.gui.windows.visualizer : VisualizerParams;

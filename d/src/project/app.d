@@ -1,5 +1,7 @@
 module project.app;
 
+/// Implements main function
+
 import project.gui.abstractions : Application;
 import project.gui.windows.content : queue, GUIBuilder;
 

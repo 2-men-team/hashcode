@@ -1,5 +1,7 @@
 module project.gui.windows.visualizer.path;
 
+/// Implements ride path abstraction
+
 import dlangui;
 
 /// Style configurations

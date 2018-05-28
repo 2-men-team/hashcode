@@ -1,5 +1,7 @@
 module project.gui.windows.holders.result;
 
+/// Implements data holder for the result of the algorithm
+
 import project.gui.abstractions.interfaces : DataHolder, Attachable;
 import project.gui.windows.visualizer : VisualizerParams, Visualizer;
 import dlangui;

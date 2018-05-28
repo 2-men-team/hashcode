@@ -1,5 +1,7 @@
 module project.gui.windows.instantiator.exceptions;
 
+/// Implements exceptions used by window instantiator
+
 import project.common.exceptions : ImplementationException;
 
 /// Throwed on instantiation error

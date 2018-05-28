@@ -1,5 +1,7 @@
 module project.gui.windows.instantiator.instantiator;
 
+/// Implements window instantiator class
+
 import project.gui.abstractions.window;
 import project.gui.abstractions.interfaces : Attachable, WindowInstantiator;
 import project.common.exceptions : InvalidValueException;

@@ -1,5 +1,7 @@
 module project.gui.windows.handlers.main;
 
+/// Implements event handlers for the 'main' window
+
 import project.gui.abstractions.application : Application;
 import project.algo : Simulator, SimulatorException;
 import project.gui.abstractions.interfaces : Attachable;

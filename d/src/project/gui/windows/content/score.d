@@ -1,11 +1,9 @@
 module project.gui.windows.content.score;
 
+/// Score window content description
+
 import project.gui.windows.instantiator.instantiator;
 import dlangui;
-
-/**
- * Score window content description
- */
 
 BasicWindowInstantiator instantiator;
 enum string windowId = "score";

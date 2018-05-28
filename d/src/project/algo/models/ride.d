@@ -1,5 +1,7 @@
 module project.algo.models.ride;
 
+/// Implements Ride model abstraction
+
 import project.algo.simulator : Simulator;
 import project.common.utils : Pos;
 

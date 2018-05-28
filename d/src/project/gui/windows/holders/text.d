@@ -1,5 +1,7 @@
 module project.gui.windows.holders.text;
 
+/// Implements data holder for the text data
+
 import project.gui.abstractions.interfaces : DataHolder, Attachable;
 import dlangui;
 

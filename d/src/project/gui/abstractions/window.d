@@ -1,5 +1,7 @@
 module project.gui.abstractions.window;
 
+/// Implements WindowTemplate abstraction
+
 import project.gui.abstractions.interfaces : Attachable, WindowInstantiator;
 import project.common.exceptions : InvalidValueException;
 import dlangui;

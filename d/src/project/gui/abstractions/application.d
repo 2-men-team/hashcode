@@ -1,5 +1,7 @@
 module project.gui.abstractions.application;
 
+/// Implements Application abstraction
+
 import project.common.exceptions : InvalidValueException;
 import project.common.utils : Singleton;
 import project.gui.abstractions.window;

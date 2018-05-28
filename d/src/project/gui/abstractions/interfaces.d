@@ -1,5 +1,7 @@
 module project.gui.abstractions.interfaces;
 
+/// Implements interfaces the gui is built on
+
 import project.gui.abstractions.window : WindowTemplate;
 import dlangui;
 

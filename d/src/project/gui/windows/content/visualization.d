@@ -1,11 +1,9 @@
 module project.gui.windows.content.visualization;
 
+/// Visualization window content description
+
 import project.gui.windows.instantiator.instantiator;
 import dlangui;
-
-/**
- * Visualization window content description
- */
 
 BasicWindowInstantiator instantiator;
 enum string windowId = "visualization";

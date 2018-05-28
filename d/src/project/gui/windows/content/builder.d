@@ -1,5 +1,7 @@
 module project.gui.windows.content.builder;
 
+/// Implements class to generate a gui interface
+
 import project.gui.abstractions.window : WindowTemplate;
 import project.gui.abstractions.interfaces : WindowInstantiator;
 

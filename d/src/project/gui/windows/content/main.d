@@ -1,11 +1,9 @@
 module project.gui.windows.content.main;
 
+/// Main window content description
+
 import project.gui.windows.instantiator.instantiator;
 import dlangui;
-
-/**
- * Main window content description
- */
 
 BasicWindowInstantiator instantiator;
 enum string windowId = "main";

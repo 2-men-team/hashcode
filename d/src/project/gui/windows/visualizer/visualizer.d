@@ -1,5 +1,7 @@
 module project.gui.windows.visualizer.visualizer;
 
+/// Implements main algorithm visualizer
+
 import project.algo.models.ride : RideResult;
 import project.gui.windows.visualizer.path : RidePath;
 

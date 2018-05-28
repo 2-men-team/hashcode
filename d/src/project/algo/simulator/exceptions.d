@@ -1,5 +1,7 @@
 module project.algo.simulator.exceptions;
 
+/// Implements exceptions thrown by Simulator class
+
 import project.common.exceptions;
 import dlangui;
 

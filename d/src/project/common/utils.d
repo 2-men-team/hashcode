@@ -1,5 +1,7 @@
 module project.common.utils;
 
+/// Implements some commonly used utilities
+
 /// Singleton pattern implementation
 mixin template Singleton() {
   private static typeof(this) _instance;

@@ -1,5 +1,7 @@
 module project.algo.models.car;
 
+/// Implements Car model abstraction
+
 import project.algo.models.ride : Ride;
 import project.common.utils : Pos;
 
