@@ -1,33 +1,41 @@
 module project.algo.models.car;
 
+/// Implements Car model abstraction
+
 import project.algo.models.ride : Ride;
 import project.common.utils : Pos;
 
-class Car {
-  private Pos _pos;
-  private Ride[] _rides;
-  private int _step;
+/// Car model class
+package(project.algo) class Car {
+  private Pos _pos; // current position
+  private Ride[] _rides; // assigned rides
+  private int _step; // current step
 
-  immutable uint id;
+  immutable uint id; // unique id
 
-  this(uint id, Pos pos = Pos(0, 0), int step = 0) pure @nogc @safe nothrow {
+  /// constructor
+  this(uint id, Pos pos = Pos(0, 0), int step = 0) {
     this.id = id;
     this._pos = pos;
     this._rides = null;
     this._step = step;
   }
 
-  @property Pos pos() const pure nothrow @nogc @safe { return this._pos; }
-  @property Pos pos(Pos newPos) pure nothrow @nogc @safe { return this._pos = newPos; }
+  /// 'pos' field getter and setter
+  @property Pos pos() const { return this._pos; }
+  @property Pos pos(Pos newPos) { return this._pos = newPos; }
 
-  @property Ride[] rides() @safe nothrow
+  /// rides getter
+  @property Ride[] rides()
   { return this._rides.dup; }
 
-  Car addRide(Ride ride) pure @safe nothrow {
+  /// assign a ride
+  Car addRide(Ride ride) {
     this._rides ~= ride;
     return this;
   }
 
-  @property int step() const pure nothrow @nogc @safe { return this._step; }
-  @property int step(int newStep) pure @nogc @safe nothrow { return this._step = newStep; }
+  /// 'step' field getter and setter
+  @property int step() const { return this._step; }
+  @property int step(int newStep) { return this._step = newStep; }
 }

@@ -1,5 +1,7 @@
 module project.app;
 
+/// Implements main function
+
 import project.gui.abstractions : Application;
 import project.gui.windows.content : queue, GUIBuilder;
 
@@ -13,11 +15,6 @@ extern (C) int UIAppMain(string[] args) {
   // application initialization
   Application.instance.theme = "theme_default";
   Application.instance.language = "en";
-
-  // add resources if any
-  version (WITH_RESOURCES) {
-    embeddedResourceList.addResources(embedResourcesFromList!"resources.list"());
-  }
 
   // creating windows and adding them to the application
   foreach (window; GUIBuilder!queue.build) {

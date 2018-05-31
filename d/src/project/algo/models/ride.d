@@ -1,40 +1,50 @@
 module project.algo.models.ride;
 
+/// Implements Ride model abstraction
+
 import project.algo.simulator : Simulator;
 import project.common.utils : Pos;
 
-struct RideParams {
-  Pos start;
-  Pos finish;
-  int startStep;
-  int finStep;
+/// struct to hold ride's initial params
+package(project.algo) struct RideParams {
+  Pos start; // start position
+  Pos finish; // finish position
+  int startStep; // early start step
+  int finStep; // latest finish step
 }
 
-class Ride {
-  immutable uint id;
-  private RideParams _params;
-  private uint _length;
+/// Ride model class
+package(project.algo) class Ride {
+  immutable uint id; // unique id
+  private RideParams _params; // initial params
+  private uint _length; // ride length
 
-  this(uint id, RideParams params) pure @nogc @safe nothrow {
+  /// constructor
+  this(uint id, RideParams params) {
     this.id = id;
     this._params = params;
     this._length = Simulator.distance(this._params.start, this._params.finish);
   }
 
-  @property RideParams params() const pure @nogc @safe nothrow
+  /// 'params' field getter
+  @property RideParams params() const
   { return this._params; }
 
-  @property uint length() const pure @nogc @safe nothrow
+  /// 'length' field getter
+  @property uint length() const
   { return this._length; }
 
+  /// make direct access to RideParams fields
   alias params this;
 }
 
-struct RideResult {
-  const Ride ride;
+/// struct to hold ride's result
+const struct RideResult {
+  Ride ride;
   bool assigned;
   bool bonused;
   bool scored;
 
+  // make direct access to ride's properties
   alias ride this;
 }

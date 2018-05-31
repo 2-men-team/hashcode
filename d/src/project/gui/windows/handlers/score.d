@@ -1,5 +1,7 @@
 module project.gui.windows.handlers.score;
 
+/// Implements event handlers for the 'score' window
+
 import project.gui.abstractions.interfaces : Attachable;
 import project.gui.abstractions : Application;
 import project.gui.windows.visualizer : VisualizerParams;
@@ -8,14 +10,18 @@ import project.algo.simulator : Simulator;
 
 import dlangui;
 
+/// Class to handle 'Visualize' button click
 class VisualizeButtonPressed : OnClickHandler, Attachable {
+  /// Handler method
   override bool onClick(Widget src) {
+    // visualization params
     VisualizerParams params = VisualizerParams(
       Simulator.instance.height,
       Simulator.instance.width,
       Simulator.instance.result
     );
 
+    // data, passed to Visualizer
     Attachable[string] data = [
       "visualizer": new ResultHolder(params)
     ];
@@ -24,7 +30,8 @@ class VisualizeButtonPressed : OnClickHandler, Attachable {
     return true;
   }
 
-  override Attachable attachTo(Widget button) pure @safe nothrow {
+  /// Method to connect handler to a specific widget (button in our case)
+  override Attachable attachTo(Widget button) {
     button.click = this;
     return this;
   }

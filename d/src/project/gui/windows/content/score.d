@@ -1,5 +1,7 @@
 module project.gui.windows.content.score;
 
+/// Score window content description
+
 import project.gui.windows.instantiator.instantiator;
 import dlangui;
 
@@ -7,6 +9,7 @@ BasicWindowInstantiator instantiator;
 enum string windowId = "score";
 enum string parentId = "main";
 
+/// Window content described in DML language
 private enum string GUI = q{
   VerticalLayout {
     backgroundColor: "#D3DAE3"
@@ -23,6 +26,7 @@ private enum string GUI = q{
       alignment: center
       fontSize: 30px
       textColor: "red"
+      minWidth: 200px
     }
     VSpacer {}
     Button {
@@ -33,10 +37,12 @@ private enum string GUI = q{
   }
 };
 
+/// Handlers assigned to specific widgets
 private enum string[][string] GUIHandlers = [
   "visualizeButton": ["project.gui.windows.handlers.score.VisualizeButtonPressed"]
 ];
 
+/// Module constructor
 static this() {
   WindowInitParams params = {
     caption: UIString.fromRaw("Score"d),

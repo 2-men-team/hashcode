@@ -1,5 +1,8 @@
 module project.common.utils;
 
+/// Implements some commonly used utilities
+
+/// Singleton pattern implementation
 mixin template Singleton() {
   private static typeof(this) _instance;
   private this() { }
@@ -10,6 +13,7 @@ mixin template Singleton() {
   }
 }
 
+/// Position holder struct
 struct Pos {
   int x;
   int y;

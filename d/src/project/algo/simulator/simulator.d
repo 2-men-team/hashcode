@@ -1,8 +1,10 @@
 module project.algo.simulator.simulator;
 
+/// Implements main algorithm
+
 import std.array : split, array, join;
 import std.conv : to, ConvException;
-import std.algorithm : map, max = maxElement;
+import std.algorithm : map, max, fold;
 import std.math : abs;
 
 import project.algo.simulator.exceptions;
@@ -11,29 +13,33 @@ import project.common.utils;
 
 import dlangui;
 
+/// validation constants
 private enum Validation : uint {
-  contentDescriptionLength = 6,
-  commonUpperLimit = 10_000,
-  fleetMaxSize = 1000,
-  fleetHeaderIndex = 2,
-  maxSteps = 1_000_000_000
+  contentDescriptionLength = 6, // most common input line length
+  commonUpperLimit = 10_000, // most common upper limit value
+  fleetMaxSize = 1000, // maximum amount of cars
+  fleetHeaderIndex = 2, // index of 'fleet' value in header
+  maxSteps = 1_000_000_000 // maximum amount of steps
 }
 
+/// main algorithm executor
 class Simulator {
-  private uint _height;
-  private uint _width;
-  private uint _fleet;
-  private uint _ridesAmount;
-  private uint _bonus;
-  private uint _totalSteps;
+  private uint _height; // height of the city map
+  private uint _width; // width of the city map
+  private uint _fleet; // current amount of cars
+  private uint _ridesAmount; // current amount of rides
+  private uint _bonus; // current bonus value
+  private uint _totalSteps; // current amount of steps
 
-  private Ride[uint] _rides;
-  private Car[uint] _cars;
-  private RideResult[] _result;
-  private ulong _score;
+  private Ride[uint] _rides; // rides container
+  private Car[uint] _cars; // cars container
+  private RideResult[] _result; // rides' results
+  private ulong _score; // score of the algorithm
 
+  // make it Singleton
   mixin Singleton;
 
+  /// simulation properties getters
   @property uint height() { return this._height; }
   @property uint width() { return this._width; }
   @property uint fleet() { return this._fleet; }
@@ -76,6 +82,7 @@ class Simulator {
       this._cars[id] = new Car(id);
     }
 
+    // reset previous result
     this._score = 0;
     this._result = null;
 
@@ -86,6 +93,7 @@ class Simulator {
   Simulator init(string data) {
     uint[][] parsed;
 
+    // parse raw data
     try {
       parsed = data.split('\n').map!(line => line.split(' ').map!(to!uint).array).array;
     } catch (ConvException) {
@@ -96,7 +104,7 @@ class Simulator {
   }
 
   /// Helper method to calculate "Manhattan distance"
-  static uint distance(Pos a, Pos b) pure @safe @nogc nothrow
+  static uint distance(Pos a, Pos b)
   { return abs(b.x - a.x) + abs(b.y - a.y); }
 
   /**
@@ -106,8 +114,9 @@ class Simulator {
   static bool validate(const uint[][] data) {
     if (data.length == 0) return false;
 
-    const uint[] header = data[0];
+    const uint[] header = data[0]; // header data description
 
+    // validate header
     if (header.length != Validation.contentDescriptionLength)
       return false;
 
@@ -119,11 +128,13 @@ class Simulator {
     }
     if (!(header[$ - 1] >= 1 && header[$ - 1] <= Validation.maxSteps)) return false;
 
+    // validate data
     if (data.length != header[3] + 1) return false;
     foreach (line; data[1 .. $]) {
       if (line.length != Validation.contentDescriptionLength)
         return false;
 
+      // validate ride data
       if (
         !(line[0] < header[0]) ||
         !(line[1] < header[1]) ||
@@ -140,134 +151,111 @@ class Simulator {
     return true;
   }
 
-  @property RideResult[] result() const @safe nothrow
+  /// 'result' field getter
+  @property RideResult[] result()
   { return this._result.dup; }
 
-  @property ulong score() const pure @safe nothrow @nogc
+  /// 'score' field getter
+  @property ulong score()
   { return this._score; }
 
   /// Method to calculate the score of the algorithm
-  private void _calcScore() {
-    Ride[uint] rides = this._rides.dup; // make a copy of the rides
+  private void _calcScore(const Ride ride, const Car car) {
+    long distToRide = Simulator.distance(car.pos, ride.start); // distance to ride
+    long maxWait = max(distToRide, ride.startStep - car.step); // maximum time to wait before ride start
+    long fullLength = maxWait + ride.length; // full ride length
+    bool bonused = false; // ride was bonused
+    bool scored = false; // ride was scored
 
-    foreach (car; this._cars) {
-      uint step = 0; // current car step
-      Pos pos = Pos(0, 0); // current car position
-
-      foreach (ride; car.rides) {
-        if (ride.id !in rides) // was already assigned to another car
-          throw new InvalidAlgorithmException("One ride is taken multiple times.");
-
-        long distToRide = Simulator.distance(pos, ride.start);
-        bool isBonused = false;
-        bool isScored = false;
-
-        if (step + distToRide <= this._totalSteps) { // car can start the ride
-          step += distToRide;
-          if (step <= ride.startStep) { // can start on time
-            this._score += this._bonus;
-            step = ride.startStep;
-            isBonused = true;
-          }
-
-          step += ride.length;
-          if (step <= ride.finStep) { // car can finish this ride
-            this._score += ride.length;
-            isScored = true;
-          }
-        } else step += distToRide + ride.length; // if ride can't be finished, just add full ride length to car step
-        pos = ride.finish; // change car position
-
-        // if ride can't be finished by the end of the simulation,
-        // conditions above won't be done on the next iteration
-
-        this._result ~= RideResult(ride, true, isBonused, isScored); // add summary of the ride to the result array
-        rides.remove(ride.id); // mark ride as taken
-      }
+    // check for bonus
+    if (car.step + distToRide <= ride.startStep) {
+      this._score += this._bonus;
+      bonused = true;
     }
 
-    // add all unassigned rides to the result array
-    foreach (ride; rides) {
-      this._result ~= RideResult(ride, false, false, false);
+    // check for car to finish on time
+    if (car.step + fullLength <= ride.finStep) {
+      this._score += ride.length;
+      scored = true;
     }
+
+    // produce ride result
+    this._result ~= RideResult(ride, true, bonused, scored);
   }
 
-  private long _rank(const Ride ride, const Car car, long maxStep) @safe pure @nogc nothrow {
-    long distToRide = Simulator.distance(car.pos, ride.start);
-    long fullLength = distToRide + ride.length;
+  /// main heuristic function
+  private long _rank(const Ride ride, const Car car) {
+    long distToRide = Simulator.distance(car.pos, ride.start); // distance to ride
+    long maxWait = max(distToRide, ride.startStep - car.step); // maximum time to wait before ride start
+    long fullLength = maxWait + ride.length; // full ride length
 
-    bool bonusValid = car.step + distToRide <= ride.startStep;
-    bool scoreValid = car.step + fullLength <= ride.finStep;
+    bool bonusValid = car.step + distToRide <= ride.startStep; // is bonus valid
+    bool scoreValid = car.step + fullLength <= ride.finStep; // was finished on time
 
-    long k;
-    if (maxStep <= ride.startStep) k = maxStep - ride.finStep;
-    else if (car.step < ride.startStep) {
-      if (maxStep < ride.finStep) k = maxStep - ride.startStep + maxStep - ride.finStep;
-      else k = maxStep - ride.startStep;
-    } else k = -fullLength;
-
-    return (this._bonus * bonusValid) ^^ 2 + ride.length * scoreValid + k;
-    //return (ride.length + this._bonus) ^^ 2 - (distToRide * abs(ride.startStep - car.step - distToRide)) + k;
+    return 700 * this._bonus * bonusValid + ride.length * scoreValid - 5 * fullLength;
   }
 
-  private auto _maxPair(Ride[uint] rides, Car[uint] cars, long maxStep) @safe pure @nogc nothrow {
-    struct Pair {
-      Ride ride;
-      Car car;
-    }
-
-    Pair result;
-    long maxRank = long.min;
-
-    foreach (ride; rides.byValue) {
-      foreach (car; cars.byValue) {
-        long rank = this._rank(ride, car, maxStep);
-
-        if (rank > maxRank) {
-          maxRank = rank;
-          result = Pair(ride, car);
-        }
-      }
-    }
-
-    return result;
-  }
-
+  /// main algorithm execution
   Simulator exec() {
+    // check for proper initialization
     if (!this.initialized)
       throw new UninitializedException(UIString.fromRaw("Simulator wasn't initialized properly."d));
 
-    Ride[uint] rides = this._rides.dup;
-    Car[uint] cars = this._cars.dup;
-    uint maxStep = 0;
+    // if haven't been executed already
+    if (this._result is null) {
+      struct RankedRide { // helper struct to hold the ride and its score
+        Ride ride;
+        long rank = long.min;
+        int step;
+      }
 
-    while (rides.length != 0 && cars.length != 0) {
-      auto pair = this._maxPair(rides, cars, maxStep);
+      // rides that wasn't assigned
+      Ride[uint] rides = this._rides.dup;
 
-      with (pair) {
-        car.addRide(ride);
-        car.step = car.step + Simulator.distance(car.pos, ride.start) + ride.length;
+      foreach (car; this._cars) {
+        while (car.step <= this._totalSteps && rides.length != 0) {
+          // get the best ride for current car
+          RankedRide best = rides.byValue.fold!((acc, ride) {
+            // step when ride will be finished
+            int step = car.step + max(Simulator.distance(car.pos, ride.start), ride.startStep - car.step) + ride.length;
+            long rank = this._rank(ride, car);
 
-        if (car.step >= this._totalSteps) {
-          cars.remove(car.id);
-          if (cars.length) maxStep = cars.byValue.max!(item => item.step).step;
-        } else if (car.step > maxStep) maxStep = car.step;
+            if (step <= ride.finStep && rank > acc.rank) return RankedRide(ride, rank, step);
+            return acc;
+          })(RankedRide.init);
 
-        car.pos = ride.finish;
-        rides.remove(ride.id);
+          // no more good rides left
+          if (best == RankedRide.init) break;
+
+          this._calcScore(best.ride, car); // assign ride's score
+          car.step = best.step; // change car step
+          car.pos = best.ride.finish; // change car position
+
+          car.addRide(best.ride); // assign a ride
+          rides.remove(best.ride.id); // remove this ride from the table
+        }
+        if (rides.length == 0) break; // no more rides to assign
+      }
+
+      // add all the existing rides' results
+      foreach (ride; rides) {
+        this._result ~= RideResult(ride, false, false, false);
       }
     }
 
-    this._calcScore();
     return this;
   }
 
+  /// produce string output
   @property string output() {
+    // check for proper initialization
     if (!this.initialized)
       throw new UninitializedException(UIString.fromRaw("Can't produce output: input data wasn't passed."d));
 
+    // check for executed algorithm
     if (this._result is null) return null;
 
+    // produce output
     return this._cars.byValue.map!(car => (
       (car.rides.length.to!string ~ car.rides.map!(ride => ride.id.to!string).array).join(' ')
     )).join('\n');

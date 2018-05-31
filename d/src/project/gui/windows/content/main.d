@@ -1,5 +1,7 @@
 module project.gui.windows.content.main;
 
+/// Main window content description
+
 import project.gui.windows.instantiator.instantiator;
 import dlangui;
 
@@ -7,15 +9,14 @@ BasicWindowInstantiator instantiator;
 enum string windowId = "main";
 enum string parentId = null;
 
+/// Window content described in DML language
 private enum string GUI = q{
   VerticalLayout {
     backgroundColor: "#D3DAE3"
     margins: 10
     padding: 20
-
     TableLayout {
       colCount: 4
-
       TextWidget {
         fontSize: 15px
         text: "Choose file to load:"
@@ -69,12 +70,14 @@ private enum string GUI = q{
   }
 };
 
+/// Handlers assigned to specific widgets
 private enum string[][string] GUIHandlers = [
   "proceedButton": ["project.gui.windows.handlers.main.ProceedButtonPressed"],
   "openFileButton": ["project.gui.windows.handlers.main.OpenFileButtonPressed"],
   "saveFileButton": ["project.gui.windows.handlers.main.SaveFileButtonPressed"]
 ];
 
+/// Module constructor
 static this() {
   WindowInitParams params = {
     caption: UIString.fromRaw("Course work"d),
