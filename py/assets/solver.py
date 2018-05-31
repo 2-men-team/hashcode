@@ -19,14 +19,14 @@ class Solver(object):
         self.output_file = file_out
 
         # simulation parameters
-        self.rows = 0
-        self.columns = 0
-        self.cars = 0
-        self.fleet = 0
-        self.rides = 0
-        self.rides_list = 0
-        self.bonus = 0
-        self.steps = 0
+        self.rows = 0 # number of rows
+        self.columns = 0 # number of columns
+        self.cars = 0 # array of Car objects
+        self.fleet = 0 # number of cars
+        self.rides = 0 # number of rides
+        self.rides_list = 0 # array of Ride objects
+        self.bonus = 0 # bonus for achieving ride on time
+        self.steps = 0 # number of steps in simulation
 
         # tune parameters
         file_name = self.get_sample_name(file_in)
@@ -82,7 +82,7 @@ class Solver(object):
         Greedy approach."""
         self.rides_list, self.rows, self.columns, self.fleet, self.rides, self.bonus, self.steps = self.read_input()
         self.cars = [Car(i) for i in range(self.fleet)] # array of Car objects
-
+        self.copied = [ride for ride in self.rides_list]
         for car in self.cars: # loop through cars
             step = 0
             while step < self.steps:
@@ -90,8 +90,8 @@ class Solver(object):
                 best_ride = None
                 for ride in self.rides_list: # loop through all rides
                     if not self.reachable(car, ride, step): continue # get only reachable rides
-                    scored = self.score(car, ride, step) # score tide
-                    if scored >= best_ride_score: # check if it is a best ride
+                    scored = self.score(car, ride, step) # score ride
+                    if scored >= best_ride_score: # check if it is the best ride
                         best_ride = ride
                         best_ride_score = scored
                 if best_ride is not None: # check if best ride was chosen

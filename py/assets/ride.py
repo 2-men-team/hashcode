@@ -1,4 +1,4 @@
-class Ride(object):
+class Ride:
     """Class to simulate Ride activities."""
     def __init__(self, id,start_x,start_y,end_x,end_y,early,fin_time):
         self.id = id # id of ride

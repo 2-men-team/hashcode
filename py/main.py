@@ -1,9 +1,10 @@
-import tkinter
+#!/usr/bin/env python3
+
 from tkinter import *
 from app.window import Window
 
 # Requirement for running: sudo apt-get install python3-tk
-# Run this file at shell as: python3 main.py
+# Run this file at shell as: ./main.py
 
 if __name__ == "__main__":
     root = Tk() # initializing window

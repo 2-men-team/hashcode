@@ -4,6 +4,7 @@ from tkinter import scrolledtext
 from tkinter import *
 from assets.simulator import Simulator
 from assets.visualizer import Visualizer
+import os
 
 # tkinter - visual lib for python
 # Simulator - class to simulate the process
@@ -49,8 +50,8 @@ class Window(Frame): # inherits from Frame
         Setting the resizable parameter to False, configuring the grid of window."""
 
         self.root = master
-        self.root.geometry("1024x768")
-        self.root.resizable(width=False, height=False)
+        self.root.geometry("1024x768") # set the size of widndow
+        self.root.resizable(width=False, height=False) # set the resizble to false
         self.root.grid_rowconfigure(0, weight=1)
         self.root.grid_columnconfigure(0, weight=1)
 
@@ -94,13 +95,14 @@ class Window(Frame): # inherits from Frame
     def process(self):
         """Function get raw data and passes it to Simulator."""
         self.raw = self.text.get(1.0, 'end')
-        success = True # flag to check if data is valid
-        try:
-            self.simulator = Simulator(self.raw, self.file_out, self.root.filename)
-        except AttributeError as e:
-            success = False
+        self.root.filename = self.text_file_input.get()
+        self.file_out = self.text_file_output.get()
+        if os.path.isfile(self.file_out) and self.raw:
+            self.simulator = Simulator(self.raw, self.file_out, self.root.filename) # self.root.filename - input file
+            success = True # flag to check if data is valid
+        else:
             messagebox.showerror("Error", "One or both files are missing!")
-            print(e)
+            success = False
 
         # show result score
         if success:
@@ -138,11 +140,11 @@ class Window(Frame): # inherits from Frame
         vis = Toplevel() # instantiate visualization modal window
         vis.wm_title("Visualization") # set title
         vis.geometry("801x601") # set resolution
-        vis.configure(background="#abb1b2") # set background
+        vis.configure(background="#A9A9A9") # set background
         vis.resizable(width=False, height=False) # set resizable
         generator = Button(vis, text="Generate new!", command=self.generate, pady=10) # create generate button
         generator.grid(row=1, column=0) # set grid
-        self.canv = Canvas(vis, width=800, height=600, background="#abb1b2", highlightthickness=0) # create canvas widget for visualization
+        self.canv = Canvas(vis, width=800, height=600, background="#A9A9A9", highlightthickness=0) # create canvas widget for visualization
         self.canv.grid(row=2,column=0)
 
         vis.grab_set()

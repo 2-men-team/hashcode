@@ -57,12 +57,15 @@ class Visualizer(object):
         self.rows, self.columns, self.fleet, self.rides, self.bonus, self.steps = self.parsed_input()
         self.cars = self.parsed_output() # get array of Car objects
 
-        for x in range(100): # visualize 100 tandom rides
-            ride_id = random.randint(0, len(self.rides_list)-1) if(len(self.rides_list) > 100) else x # pick random ride
-            ride = self.rides_list[ride_id] # get Ride object by id
-            current_car = self.find(ride) # find car, which this ride was assigned to
-            bonus_color, ride_color = self.color(ride, current_car) # find colors for this ride
-            self.draw(ride, bonus_color, ride_color) # draw ride
+        try:
+            for x in range(100): # visualize 100 tandom rides
+                ride_id = random.randint(0, len(self.rides_list)-1) if(len(self.rides_list) > 100) else x # pick random ride
+                ride = self.rides_list[ride_id] # get Ride object by id
+                current_car = self.find(ride) # find car, which this ride was assigned to
+                bonus_color, ride_color = self.color(ride, current_car) # find colors for this ride
+                self.draw(ride, bonus_color, ride_color) # draw ride
+        except IndexError:
+            print("There is less than 100 rides in input file.")
 
     def find(self, ride):
         """Find Car to which the ride was assigned"""
