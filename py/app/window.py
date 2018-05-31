@@ -97,7 +97,7 @@ class Window(Frame): # inherits from Frame
         self.raw = self.text.get(1.0, 'end')
         self.root.filename = self.text_file_input.get()
         self.file_out = self.text_file_output.get()
-        if os.path.isfile(self.file_out) and self.raw:
+        if self.file_out and len(self.raw.split()) != 0 and os.path.isfile(self.file_out) and self.raw:
             self.simulator = Simulator(self.raw, self.file_out, self.root.filename) # self.root.filename - input file
             success = True # flag to check if data is valid
         else:
