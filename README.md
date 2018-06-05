@@ -1,6 +1,8 @@
 # HashCode
 *Course work project based on Google HashCode 2018 task*
 
+![HashCode 2018](HashCode2018.png)
+
 # Description
 This repository contains two implementations of the Google HashCode 2018 task (online qualification round to be more precise).
 Implementations was performed using [Python 3](https://www.python.org/) and [D](https://dlang.org/) languages.
