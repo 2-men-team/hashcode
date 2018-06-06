@@ -8,6 +8,7 @@ import project.gui.windows.visualizer.path : RidePath;
 import std.random : shuffle = partialShuffle;
 import std.range : iota;
 import std.array : array;
+import std.algorithm : min;
 
 import dlangui;
 import dlangui.widgets.metadata;
@@ -41,7 +42,7 @@ class Visualizer : CanvasWidget {
 
   /// Produces StatusColor of a particular Ride
   private auto _checkStatus(RideResult ride) {
-    // struct to hold StatusColor
+    // struct to hold Color
     struct Status {
       Color point; // color of the start point
       Color path; // color of a whole path
@@ -86,7 +87,7 @@ class Visualizer : CanvasWidget {
   /// Performs visualization
   override void doDraw(DrawBuf buf, Rect rect) {
     // amount of rides to visualize
-    ulong amount = this._amount < this._params.data.length ? this._amount : this._params.data.length;
+    ulong amount = min(this._amount, this._params.data.length);
 
     // perform rundom shuffle and produce visualization
     foreach (i; this._params.data.length.iota.array.shuffle(amount)[0 .. amount]) {

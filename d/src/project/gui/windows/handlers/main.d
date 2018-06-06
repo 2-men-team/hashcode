@@ -96,6 +96,7 @@ class SaveFileButtonPressed : OnClickHandler, Attachable {
 
 /// Class to handle 'Proceed' button click
 class ProceedButtonPressed : OnClickHandler, Attachable {
+  /// Handler method
   override bool onClick(Widget src) {
     // input data
     string data = src.window.mainWidget.childById("inputEditBox").text.toUTF8;

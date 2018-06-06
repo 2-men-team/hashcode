@@ -10,12 +10,12 @@ import dlangui;
 
 /// Struct to contain initial params for Window object
 struct WindowInitParams {
-  UIString caption; // Window's caption
-  string content; // Window's content in DML
-  string[][string] handlers; // Event handlers for window's content
-  WindowFlag flags = WindowFlag.Resizable | WindowFlag.MeasureSize; // Window's flags
-  uint width = 0u; // Window's width
-  uint height = 0u; // Window's height
+  UIString caption; // Window caption
+  string content; // Window content in DML
+  string[][string] handlers; // Event handlers for window content
+  WindowFlag flags = WindowFlag.Resizable | WindowFlag.MeasureSize; // Window flags
+  uint width = 0u; // Window width
+  uint height = 0u; // Window height
 }
 
 /// Main class to initialize windows in this project
