@@ -192,7 +192,7 @@ class Simulator {
     bool bonusValid = car.step + distToRide <= ride.startStep; // is bonus valid
     bool scoreValid = car.step + fullLength <= ride.finStep; // was finished on time
 
-    return 700 * this._bonus * bonusValid + ride.length * scoreValid - 5 * fullLength;
+    return 30 * this._bonus * bonusValid + ride.length * scoreValid - fullLength;
   }
 
   /// main algorithm execution
