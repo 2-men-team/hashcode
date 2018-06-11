@@ -47,6 +47,7 @@ class Car(object):
             return (ride.early - (self.step + self.distance_to_start(ride)))
         else:
             return 0
+
     def finish_time(self, ride):
         return self.step + self.distance_to_start(ride) + self.wait_time(ride) + ride.distance()
 
@@ -82,7 +83,8 @@ def read_input(input_file):
 def read_output(output_file):
     with open(output_file) as file:
         res_array = file.read().split("\n")
-        del res_array[-1]
+        if not res_array[-1]: # line is empty
+          del res_array[-1]
         res_array = [x.split(" ") for x in res_array]
         cars_rides = []
         for i in range(len(res_array)):
