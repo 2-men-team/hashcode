@@ -94,7 +94,10 @@ class WindowTemplate {
   /// closes window using native methods (optionally)
   void close(bool native = true) {
     if (this.instantiated) { // was already instantiated and showed
-      foreach (child; this._childs) child.close();
+      foreach (child; this._childs) {
+        if (child.instantiated) // child was already instantiated and showed
+          child.close();
+      }
       if (native) this._window.close();
       this._window = null;
     }
