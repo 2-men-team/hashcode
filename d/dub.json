@@ -9,7 +9,7 @@
 	"targetType": "executable",
 	"targetPath": "bin",
 	"dependencies": {
-		"dlangui": "~>0.9.178"
+		"dlangui": "~>0.9.182"
 	},
 	"subConfigurations": {
 		"dlangui": "x11"
