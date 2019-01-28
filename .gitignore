@@ -16,3 +16,4 @@ bin/
 *.log
 views/
 *.txt
+d/.idea
